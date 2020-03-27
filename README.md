@@ -9,7 +9,7 @@
 :round_pushpin: Статья в Тинькофф-журнале (Т—Ж) (готовится).
 
 
-:point_right: [Тут](....) находится эта версия таблицы в редакции апреля 2020 г.
+:point_right: [Тут](....) находится эта версия таблицы в редакции апреля 2020 г. :point_left:
 
 * * * * *
 
@@ -22,4 +22,4 @@
 
 :round_pushpin: Первое публичное упоминание таблицы [ВКонтакте](https://vk.com/mshardin?w=wall1763465_1791) (январь 2019 г).
 
-:point_right: [Тут](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) находится эта версия таблицы в редакции марта 2020 г.
+:point_right: [Тут](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) находится эта версия таблицы в редакции марта 2020 г. :point_left:
