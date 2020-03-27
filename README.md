@@ -8,7 +8,7 @@
 ### Редакция таблицы полностью на русском языке и выполненная только на формулах
 1. Статья в Тинькофф-журнале (Т—Ж) (готовится).
 
-[Тут](https://github.com/empenoso/SilverFir-Investment-Report/) находится бесплатная версия таблицы полностью на русском языке и выполненная только на формулах, в редакции апреля 2020 г.
+[Тут](https://github.com/empenoso/SilverFir-Investment-Report/) находится эта версия в редакции апреля 2020 г.
 
 * * * * *
 
@@ -17,4 +17,4 @@
 2. KMyMoney, Microsoft Excel, Google Таблицы и сопутствующая экосистема на Google Apps Script в статье на [Хабре](https://habr.com/ru/post/477920/#Google) (декабрь 2019 г).
 3. Более подробная инструкция как пользоваться этой редакцией таблицы на [Яндекс.Дзен](https://zen.yandex.ru/media/id/5dfb4f5af73d9d00ae13157e/googletablica-pomojet-podschitat-vashi-finansovye-aktivy--5dfb53f91febd400b9d08780?ref=github.com) (декабрь 2019 г).
 
-[Тут находится](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) бесплатная версия таблицы, в редакции марта 2020 г.
+[Тут](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) находится эта версия в редакции марта 2020 г.
