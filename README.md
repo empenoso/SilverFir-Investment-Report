@@ -1,2 +1,2 @@
-# SilverFir-Investment-Report
-SilverFir: Investment Report
+# SilverFir: Investment Report
+Это бесплатная гугл таблица, которая позволяет учитывать собственные активы, независимо от того в какой они форме.
