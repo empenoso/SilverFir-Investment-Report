@@ -5,14 +5,14 @@
 
 * * * * *
 
-### Редакция таблицы полностью на русском языке и выполненная только на формулах
+### Редакция таблицы :evergreen_tree: полностью на русском языке и выполненная только на формулах
 :round_pushpin: Статья в Тинькофф-журнале (Т—Ж) (готовится).
 
 [Тут](https://github.com/empenoso/SilverFir-Investment-Report/) находится эта версия в редакции апреля 2020 г.
 
 * * * * *
 
-### Первая редакция таблицы на английском языке
+### Первая редакция таблицы :evergreen_tree: на английском языке
 :round_pushpin: Обзорная статья по первой редакции таблицы на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov) (ноябрь 2019 г).
 
 :round_pushpin: KMyMoney, Microsoft Excel, Google Таблицы и сопутствующая экосистема на Google Apps Script в статье на [Хабре](https://habr.com/ru/post/477920/#Google) (декабрь 2019 г).
