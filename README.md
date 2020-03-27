@@ -13,7 +13,7 @@
 
 * * * * *
 
-### Первая редакция таблицы на английском языке
+### Первая редакция таблицы (на английском языке)
 :round_pushpin: Обзорная статья по первой редакции таблицы на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov) (ноябрь 2019 г).
 
 :round_pushpin: KMyMoney, Microsoft Excel, Google Таблицы и возможности на скриптах в статье на [Хабре](https://habr.com/ru/post/477920/#Google) (декабрь 2019 г).
