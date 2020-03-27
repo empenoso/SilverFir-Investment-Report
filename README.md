@@ -13,8 +13,8 @@
 * * * * *
 
 ### Первая редакция таблицы на английском языке
-1. Обзорная статья по первой редакции таблицы на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov) в ноябре 2019 г.
-2. KMyMoney, Microsoft Excel, Google Таблицы и сопутствующая экосистема на Google Apps Script в статье на [Хабре](https://habr.com/ru/post/477920/#Google) в декабре 2019 г.
-3. Более подробная инструкция как пользоваться Google Таблицей "SilverFir: Investment Report" в этой редакции на [Яндекс.Дзен](https://zen.yandex.ru/media/id/5dfb4f5af73d9d00ae13157e/googletablica-pomojet-podschitat-vashi-finansovye-aktivy--5dfb53f91febd400b9d08780?ref=github.com).
+1. Обзорная статья по первой редакции таблицы на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov) (ноябрь 2019 г).
+2. KMyMoney, Microsoft Excel, Google Таблицы и сопутствующая экосистема на Google Apps Script в статье на [Хабре](https://habr.com/ru/post/477920/#Google) (декабрь 2019 г).
+3. Более подробная инструкция как пользоваться Google Таблицей "SilverFir: Investment Report" в этой редакции на [Яндекс.Дзен](https://zen.yandex.ru/media/id/5dfb4f5af73d9d00ae13157e/googletablica-pomojet-podschitat-vashi-finansovye-aktivy--5dfb53f91febd400b9d08780?ref=github.com) (декабрь 2019 г).
 
-[Тут](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) находится бесплатная версия таблицы, в редакции марта 2020 г.
+[Тут находится](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) бесплатная версия таблицы, в редакции марта 2020 г.
