@@ -3,8 +3,8 @@
 
 Если серьезно задумались при ответе на последний вопрос, приглашаю ознакомиться с комплексным решением по автоматизации учета практически любых финансовых активов в независимости от валюты и площадки размещения. 
 
-Обзорная статья на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov).
+Обзорная статья на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov) в ноябре 2019 г.
 
-Более подробная техническая информация и описание расширенного функционала на [Хабре](https://habr.com/ru/post/477920/#Google).
+Более подробная техническая информация и описание расширенного функционала на [Хабре](https://habr.com/ru/post/477920/#Google) в декабре 2019 г.
 
-[Бесплатная версия Google Таблицы на ImportXML](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing). 
+[Бесплатная версия Google Таблицы на ImportXML](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing), в редакции марта 2020 г. 
