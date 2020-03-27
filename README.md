@@ -7,4 +7,9 @@
 
 Более подробная техническая информация и описание расширенного функционала на [Хабре](https://habr.com/ru/post/477920/#Google) в декабре 2019 г.
 
+* * * * * 
+Первая редакция SilverFir: Investment Report :evergreen_tree: в гугл таблицах на английском языке
+
 [Бесплатная версия Google Таблицы на ImportXML](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing), в редакции марта 2020 г. 
+
+* * * * * 
