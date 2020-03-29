@@ -14,11 +14,11 @@
 * * * * *
 
 ### Первая редакция таблицы (версия на английском языке)
-:round_pushpin: Более подробная инструкция как пользоваться этой редакцией таблицы на [Яндекс.Дзен](https://zen.yandex.ru/media/id/5dfb4f5af73d9d00ae13157e/googletablica-pomojet-podschitat-vashi-finansovye-aktivy--5dfb53f91febd400b9d08780?ref=github.com) (декабрь 2019 г).
+:round_pushpin: Подробная инструкция как пользоваться этой редакцией таблицы опубликована на [Яндекс.Дзен](https://zen.yandex.ru/media/id/5dfb4f5af73d9d00ae13157e/googletablica-pomojet-podschitat-vashi-finansovye-aktivy--5dfb53f91febd400b9d08780?ref=github.com) (декабрь 2019 г).
 
-:round_pushpin: KMyMoney, Microsoft Excel, Google Таблицы и возможности на скриптах в статье на [Хабре](https://habr.com/ru/post/477920/#Google) (декабрь 2019 г).
+:round_pushpin: Больше технических подробностей по предыстории создания в статье на [Хабре](https://habr.com/ru/post/477920/#Google) (декабрь 2019 г).
 
-:round_pushpin: Обзорная статья по первой редакции таблицы на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov) (ноябрь 2019 г).
+:round_pushpin: Обзорная статья и предыстория создания первой редакции таблицы на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov) (ноябрь 2019 г).
 
 :round_pushpin: Первое публичное упоминание таблицы [ВКонтакте](https://vk.com/mshardin?w=wall1763465_1791) (январь 2019 г).
 
