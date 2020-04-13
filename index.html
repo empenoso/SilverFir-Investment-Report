@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="SilverFir is a free and open source Investment Report.">
+    <meta property="og:title" content="Open Source Investment Report">
+    <meta property="og:description" content="SilverFir is a free and open source Investment Report.">
+    <meta property="og:url" content="https://fir.icu/">
+    <meta property="og:site_name" content="SilverFir">
+    <title>Open Source Investment Report | SilverFir 🌲</title>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <!-- Google Chart -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <!-- Google Donut Chart -->
+    <script type="text/javascript">
+        google.charts.load("current", {
+            packages: ["corechart"]
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Asset', 'Number'],
+                ['Cash', 1],
+                ['Foreign currency', 1],
+                ['Card', 1],
+                ['Commodities', 1],
+                ['Real estate', 1],
+                ['REIT', 1],
+                ['Global Bonds', 1],
+                ['Domestic Bonds', 1],
+                ['Deposit account', 1],
+                ['Debt', 1],
+                ['Large Cap Stocks', 1],
+                ['Small Cap Stocks', 1],
+                ['International Stocks', 1],
+                ['Private equity', 1],
+                ['Derivatives', 1]
+            ]);
+
+            var options = {
+                legend: 'none',
+                pieSliceText: 'label',
+                pieHole: 0.5,
+                slices: {
+                    4: {
+                        offset: 0.2
+                    },
+                    12: {
+                        offset: 0.3
+                    },
+                    14: {
+                        offset: 0.4
+                    },
+                },
+            };
+
+            var chart = new google.visualization.PieChart(document.getElementById('donutchart'));
+            chart.draw(data, options);
+        }
+    </script>
+
+    <!-- Google Gantt Charts -->
+    <script type="text/javascript">
+        google.charts.load('current', {
+            'packages': ['gantt']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function daysToMilliseconds(days) {
+            return days * 24 * 60 * 60 * 1000;
+        }
+
+        function drawChart() {
+
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Task ID');
+            data.addColumn('string', 'Task Name');
+            data.addColumn('date', 'Start Date');
+            data.addColumn('date', 'End Date');
+            data.addColumn('number', 'Duration');
+            data.addColumn('number', 'Percent Complete');
+            data.addColumn('string', 'Dependencies');
+
+            data.addRows([
+                ['First', 'Первая версия, 🇺🇸', new Date(2018, 0), new Date(2018, 5), null, 100, null],
+                ['GAS', 'Разработка версии на гугл скриптах, 🇺🇸', new Date(2018, 5), new Date(), null, 85, 'First'],
+                ['Formulas', 'Публичная версия на формулах, 🇺🇸', new Date(2019, 0), new Date(2020, 1), null, 90, 'First'],
+                ['TJ', 'Упрощенная редакция, 🇷🇺', new Date(2019, 10), new Date(2020, 3), null, 100, 'Formulas'],
+            ]);
+
+            var options = {
+                height: 212
+            };
+
+            var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+            chart.draw(data, options);
+        }
+    </script>
+
+    <!-- Google Word Trees -->
+    <script type="text/javascript">
+        google.charts.load('current', {
+            packages: ['wordtree']
+        });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            var data = google.visualization.arrayToDataTable(
+                [
+                    ['Phrases'],
+                    ['Investment SilverFir Silver'],
+                    ['Report SilverFir Fir'],
+                    ['SilverFir 🌲']
+                ]
+            );
+
+            var options = {
+                wordtree: {
+                    format: 'implicit',
+                    type: 'double',
+                    word: 'SilverFir'
+                }
+            };
+
+            var chart = new google.visualization.WordTree(document.getElementById('wordtree_basic'));
+            chart.draw(data, options);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="container mt-3">
+        <!-- Меню -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white">
+            <a class="navbar-brand" href="#top">SilverFir: Investment Report 🌲</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#assets">Поддерживаемые активы<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#google">Google Таблицы</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#release">Редакции</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#publications">Публикации</a>
+                    </li>
+                </ul>
+            </div>
+            <span class="navbar-text"><a class="nav-link" href="#free">It's FREE</a></span>
+        </nav>
+
+        <!-- Общее описание и картинка -->
+        <section class="bg-center-top bg-no-repeat py-5">
+            <div class="container-fluid">
+                <div class="row align-items-center pb-lg-5">
+                    <div class="col-lg-6 pt-lg-5 pt-xl-0 pb-lg-5 mb-lg-5">
+                        <div class="mx-auto ml-lg-auto mr-lg-0 text-center text-lg-left" style="max-width: 555px;">
+                            <h2><a id="top">Знайте всё о собственных активах</a></h2>
+                            <p class="text opacity-80 pb-4">Простой и безопасный способ увидеть совокупную стоимость всех вложений, а также бюджет грядущий поступлений, Asset Allocation и другие отчеты.<br>
+                                Решение на основе парсинга общедостурных сайтов.</p>
+                            <a class="btn btn-outline-primary" href="#publications">Узнать побробнее о бесплатном <br>решении с использованием Google Таблиц<i class="fe fe-arrow-right d-none d-md-inline ml-3"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 pt-4">
+                        <img class="d-block mx-auto img-fluid" src="monitor500px.jpg" alt="Google Таблица">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Поддерживаемые активы -->
+        <section class="pt-9 pt-md-12">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12 ">
+                        <h2 class="text-uppercase"><a id="assets">Поддерживаемые активы</a></h2>
+                        Источником данных для отчетной таблицы SilverFir: Investment Report 🌲 может стать любой сайт, который публикует котировки или параметры активов. Можно учесть:
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <ul>
+                            <li>Акции</li>
+                            <li>Облигации</li>
+                            <li>ETF</li>
+                            <li>Недвижимость
+                                <ul>
+                                    <li>Арендная </li>
+                                    <li>Коммерческая</li>
+                                </ul>
+                            </li>
+                            <li>Unit-Linked</li>
+                            <li>НСЖ</li>
+                            <li>Вклады</li>
+                            <li>ПИФы</li>
+                            <li>Инвестиционные монеты</li>
+                            <li>(Список можно дополнить)</li>
+                        </ul>
+                    </div>
+                    <div class="col-12 col-md-9 d-flex align-items-center">
+                        <div class="mx-auto" style="width: 150px;">
+                            <div id="wordtree_basic" class="d-none d-lg-block text-center" style="width: 550px; height: 250px;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Google Таблица -->
+        <section class="pt-9 pt-md-12" style="background-color: #e8f0ef;">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12 ">
+                        <h2 class="text-uppercase"><a id="google">Google Таблицы</a></h2>
+                        Отчетный шаблон SilverFir: Investment Report 🌲 сделан на основе Google Таблиц и это позволяет редактировать и просматривать его на любом устройстве – телефоне, планшете или компьютере. Никто, кроме Вас не имеет доступа данным хранящимся в Вашей копии таблицы. К тому же Google Таблицы имеют множество функций, которые позволяют сделать отчётную таблицу максимально эффективной.
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Редакции <div id="donutchart" class="d-none d-lg-block text-center" style="width: 400px; height: 300px;"></div> -->
+        <section class="pt-9 pt-md-12">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 ">
+                        <h2 class="text-uppercase"><a id="release">Редакции</a></h2>
+                        Отчетный шаблон SilverFir: Investment Report 🌲 изначально был сделан для личного использования и поэтому развивался неупорядоченно, историю версий можно посмотреть на этой диаграмме:<br><br>
+                        <div id="chart_div"></div>
+                    </div>
+                    <div class="col-12 col-md-7 col-lg-6 order-md-1 text-center">
+                        <strong>Текущая рекомендуемая редакции SilverFir: Investment Report 🌲:</strong><br>
+                        <a class="btn btn-outline-primary" href="#publications">Т—Ж release ⭐</a></button>
+                    </div>
+                    <div class="col-12 col-md-5 col-lg-6 order-md-2 text-center">
+                        Устаревшая редакция на английском языке (февраль 2020 г.):<br>
+                        <a class="btn btn-outline-primary" href="https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing">importXML example</a></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Публикации -->
+        <section class="pt-9 pt-md-12" style="background-color: #e8f0ef;">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12 ">
+                        <h2 class="text-uppercase"><a id="publications">Публикации</a></h2>
+                        <strong>Гугл таблица на русском языке (реализована на формулах)</strong><br>
+                        📍 Статья в Тинькофф-журнале (Т—Ж) (готовится).<br><br><!-- <a href="https://journal.tinkoff.ru/investment-report/">Тинькофф-журнале (Т—Ж) (апрель 2020 г).</a> -->
+                        <strong>Гугл таблица на английском языке (реализована на формулах)</strong><br>
+                        📍 Подробная инструкция как пользоваться этой редакцией таблицы опубликована на <a href="https://zen.yandex.ru/media/id/5dfb4f5af73d9d00ae13157e/googletablica-pomojet-podschitat-vashi-finansovye-aktivy--5dfb53f91febd400b9d08780?ref=github.com">Яндекс.Дзен</a> (декабрь 2019 г).<br>
+                        📍 Больше технических подробностей по предыстории создания в статье на <a href="https://habr.com/ru/post/477920/#Google">Хабре</a> (декабрь 2019 г).<br>
+                        📍 Обзорная статья и предыстория создания первой редакции таблицы на <a href="https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov">vc.ru</a> (ноябрь 2019 г).<br>
+                        📍 Первое публичное упоминание таблицы <a href="https://vk.com/mshardin?w=wall1763465_1791">ВКонтакте</a> (январь 2019 г).<br>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Почему это бесплатно и открыто -->
+        <section class="pt-9 pt-md-12">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12 ">
+                        <h2 class="text-uppercase"><a id="free">Программное обеспечение с открытым исходным кодом</a></h2>
+                    </div>
+                    <div class="col-12 col-md-8">
+                        SilverFir: Investment Report 🌲 - это отчетный шаблон с открытым исходным кодом. Исходный код <a href="https://github.com/empenoso/SilverFir-Investment-Report">размещен на GitHub</a>, и каждый может свободно просматривать, проверять и вносить свой вклад в развитие проекта.<br>
+                        Наличие открытого исходного кода в подобных вещах является требованием для обеспечения безопасности и конфиденциальности данных.
+                    </div>
+                    <div class="col-12 col-md-4 d-flex align-items-center">
+                        <div class="mx-auto" style="width: 150px;">
+                            <img class="d-none d-lg-block text-center" width="130" src="open-source.png">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Подвал -->
+        <section class="pt-9 pt-md-12">
+            <div class="container">
+                <div class="row ">
+                    <div class="col-12 ">
+                        © 2018 - 2020, SilverFir: Investment Report 🌲
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+</body>
+
+</html>
