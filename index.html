@@ -94,14 +94,25 @@
             data.addColumn('string', 'Dependencies');
 
             data.addRows([
-                ['First', 'Первая версия, 🇺🇸', new Date(2018, 0), new Date(2018, 5), null, 100, null],
-                ['GAS', 'Разработка версии на гугл скриптах, 🇺🇸', new Date(2018, 5), new Date(), null, 85, 'First'],
-                ['Formulas', 'Публичная версия на формулах, 🇺🇸', new Date(2019, 0), new Date(2020, 1), null, 90, 'First'],
-                ['TJ', 'Упрощенная редакция, 🇷🇺', new Date(2019, 10), new Date(2020, 3), null, 100, 'Formulas'],
+                ['First', 'Начало разработки, 🇺🇸', new Date(2018, 0), new Date(2018, 5), null, 100, null],
+                ['GAS', 'Разработка версии на гугл скриптах (GAS), 🇺🇸', new Date(2018, 5), new Date(), null, 100, 'First'],
+                ['NODEJS', 'Изучение возможности использования Node.js', new Date(2020, 2), new Date(2020, 3), null, 30, 'GAS'],
+                ['GAS0', 'Механизам парсинга сайтов (GAS)', new Date(2018, 5), new Date(2018, 9), null, 100, 'First'],
+                ['GAS6', 'Геораспределение активов (GAS)', new Date(2019, 2), new Date(2019, 5), null, 100, 'GAS0'],
+                ['GAS1', 'Форма еженедельного отчета (GAS)', new Date(2018, 8), new Date(2018, 10), null, 100, 'GAS0'],
+                ['GAS2', 'Интеграция с G Календарём (GAS)', new Date(2018, 10), new Date(2018, 12), null, 100, 'GAS1'],
+                ['GAS3', 'Telegram оповещения (GAS)', new Date(2019, 0), new Date(2019, 2), null, 100, 'GAS2'],
+                ['GAS4', 'Интеграция с G Презентациями (GAS)', new Date(2018, 11), new Date(2019, 1), null, 100, 'GAS1'],
+                ['GAS5', 'Импорт от брокеров (GAS)', new Date(2019, 1), new Date(2019, 3), null, 100, 'GAS0'],
+                ['GAS7', 'Stock/Bond/Other (GAS)', new Date(2019, 5), new Date(2019, 7), null, 100, 'GAS6'],
+                ['GAS8', 'Asset Allocation (GAS)', new Date(2019, 5), new Date(2019, 8), null, 100, 'GAS6'],
+                ['GAS9', 'Cash Flow (GAS)', new Date(2020, 0), new Date(2020, 2), null, 100, 'GAS2'],
+                ['Formulas', 'Публичная версия на формулах, 🇺🇸', new Date(2018, 11), new Date(2020, 1), null, 90, 'First'],
+                ['TJ', 'Упрощенная редакция (Т—Ж release), 🇷🇺', new Date(2019, 10), new Date(2020, 3), null, 100, 'Formulas'],
             ]);
 
             var options = {
-                height: 212
+                height: 670
             };
 
             var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
@@ -224,7 +235,7 @@
         </section>
 
         <!-- Google Таблица -->
-        <section class="pt-9 pt-md-12">
+        <section class="pt-9 pt-md-12 py-3">
             <div class="container">
                 <div class="row ">
                     <div class="col-12 col-md-8">
@@ -241,7 +252,7 @@
         </section>
 
         <!-- Редакции -->
-        <section class="pt-9 pt-md-12">
+        <section class="pt-9 pt-md-12  py-3">
             <div class="container">
                 <div class="row">
                     <div class="col-12 ">
@@ -249,11 +260,11 @@
                         Отчетный шаблон SilverFir: Investment Report 🌲 изначально был сделан для личного использования и поэтому развивался неупорядоченно, историю версий можно посмотреть на этой диаграмме:<br><br>
                         <div id="chart_div"></div>
                     </div>
-                    <div class="col-12 col-md-7 col-lg-6 order-md-1 text-center">
+                    <div class="col-12 col-md-7 col-lg-6 order-md-1 text-center py-5">
                         <strong>Текущая рекомендуемая редакции SilverFir: Investment Report 🌲:</strong><br>
                         <a class="btn btn-outline-primary" href="#publications">Т—Ж release ⭐</a></button>
                     </div>
-                    <div class="col-12 col-md-5 col-lg-6 order-md-2 text-center">
+                    <div class="col-12 col-md-5 col-lg-6 order-md-2 text-center  py-5">
                         Устаревшая редакция на английском языке (февраль 2020 г.):<br>
                         <a class="btn btn-outline-primary" href="https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing">importXML example</a></button>
                     </div>
@@ -262,7 +273,7 @@
         </section>
 
         <!-- Публикации -->
-        <section class="pt-9 pt-md-12" style="background-color: #e8f0ef;">
+        <section class="pt-9 pt-md-12  py-3" style="background-color: #e8f0ef;">
             <div class="container">
                 <div class="row ">
                     <div class="col-12 ">
@@ -281,7 +292,7 @@
         </section>
 
         <!-- Почему это бесплатно и открыто -->
-        <section class="pt-9 pt-md-12">
+        <section class="pt-9 pt-md-12  py-3">
             <div class="container">
                 <div class="row ">
                     <div class="col-12 ">
@@ -301,7 +312,7 @@
         </section>
 
         <!-- Подвал -->
-        <section class="pt-9 pt-md-12">
+        <section class="pt-9 pt-md-12  py-3">
             <div class="container">
                 <div class="row ">
                     <div class="col-12 ">
