@@ -8,7 +8,7 @@
 * * * * *
 
 ### Гугл таблица на русском языке (реализована на формулах)
-:round_pushpin: Статья в Тинькофф-журнале (Т—Ж) (готовится).
+:round_pushpin: Статья в [Тинькофф-журнале (Т—Ж)](https://journal.tinkoff.ru/investment-report/) (апрель 2020 г).
 
 :point_right: [Версия таблицы в этой редакции](https://docs.google.com/spreadsheets/d/12WxMr2dpx9tHUVGU5uL0KCmlj3khIP6PI9cZ0xLmbuA/edit?usp=sharing) на апрель 2020 г. :point_left:
 
