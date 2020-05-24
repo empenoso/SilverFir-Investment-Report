@@ -1,0 +1,24 @@
+{
+  "name": "moex-bond-search",
+  "version": "0.2.0",
+  "description": "Модуль поиска облигаций по параметрам на Московской бирже.",
+  "homepage": "https://fir.icu/",
+  "main": "index.js",
+  "dependencies": {
+    "node-fetch": ""
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/empenoso/SilverFir-Investment-Report"
+  },
+  "keywords": [
+    "moex",
+    "bonds",
+    "search"
+  ],
+  "author": "Mikhail Shardin [Михаил Шардин] (https://www.facebook.com/mikhail.shardin/)",
+  "license": "Apache-2.0"
+}
