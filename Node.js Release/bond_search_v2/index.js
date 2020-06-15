@@ -6,6 +6,7 @@
  * 
  * Запуск под Linux: $ npm start
  * Запуск под Windows: start.bat
+ * Подробности: https://habr.com/ru/post/506720/ 
  *
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://www.facebook.com/mikhail.shardin/
