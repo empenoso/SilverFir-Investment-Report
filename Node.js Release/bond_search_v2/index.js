@@ -2,7 +2,7 @@
  * SilverFir: Investment Report 🌲 [Node.js Release]
  * https://fir.icu/
  * 
- * Модуль поиска облигаций по параметрам [bond_search_v2.js]
+ * Модуль поиска облигаций по параметрам [bond_search_v2/index.js]
  * 
  * Запуск под Linux: $ npm start
  * Запуск под Windows: start.bat
