@@ -14,7 +14,7 @@
  * 
  */
 
-// bond_search_v2()
+bond_search_v2()
 
 async function bond_search_v2() {
     let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
