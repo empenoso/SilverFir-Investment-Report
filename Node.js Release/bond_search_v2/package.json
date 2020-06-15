@@ -5,7 +5,7 @@
   "homepage": "https://fir.icu/",
   "main": "index.js",
   "dependencies": {
-    "node-fetch": ""
+    "node-fetch": "^2.6.0"
   },
   "scripts": {
     "start": "node index.js"

@@ -3,6 +3,9 @@
  * https://fir.icu/
  * 
  * Модуль поиска облигаций по параметрам [bond_search_v2.js]
+ * 
+ * Запуск под Linux: $ npm start
+ * Запуск под Windows: start.bat
  *
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://www.facebook.com/mikhail.shardin/
@@ -11,7 +14,7 @@
  * 
  */
 
-bond_search_v2()
+// bond_search_v2()
 
 async function bond_search_v2() {
     let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
@@ -33,13 +36,13 @@ async function bond_search_v2() {
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 5 //Доходность больше этой цифры
-    const YieldLess = 15 //Доходность меньше этой цифры
+    const YieldMore = 7 //Доходность больше этой цифры
+    const YieldLess = 14 //Доходность меньше этой цифры
     const PriceMore = 95 //Цена больше этой цифры
     const PriceLess = 101 //Цена меньше этой цифры
-    const DurationMore = 4 //Дюрация больше этой цифры
-    const DurationLess = 15 //Дюрация меньше этой цифры
-    const VolumeMore = 15000 //Объем сделок за n дней, шт. больше этой цифры
+    const DurationMore = 1 //Дюрация больше этой цифры
+    const DurationLess = 6 //Дюрация меньше этой цифры
+    const VolumeMore = 5000 //Объем сделок за n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
@@ -73,7 +76,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                 BondYield = json.marketdata.data[i][1]
                 BondDuration = Math.floor((json.marketdata.data[i][2] / 30) * 100) / 100 // кол-во оставшихся месяцев 
                 console.log('%s. Работа со строкой %s из %s: %s (%s).', getFunctionName(), (i + 1), count, BondName, SECID)
-                log += '<li>Работа со строкой ' + (i + 1) + ' из ' + count + ': ' + SECID + ' в ' + new Date().getHours() + ':' + new Date().getMinutes() + '.</li>'
+                log += '<li>Работа со строкой ' + (i + 1) + ' из ' + count + ': ' + SECID + ' (' + BondYield + '%, ' + BondPrice + ').</li>'
                 if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
                     BondPrice > PriceMore && BondPrice < PriceLess &&
                     BondDuration > DurationMore && BondDuration < DurationLess) {
@@ -82,7 +85,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     if (BondVolume > VolumeMore) { //если оборот в бумагах больше этой цифры
                         BondTax = await MOEXsearchTax(SECID)
                         bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, BondTax])
-                        console.log('%s. Cтрока № %s: %s.', getFunctionName(), (bonds.length - 1), JSON.stringify(bonds[bonds.length - 1]))
+                        console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
                         log += '<li><b>Cтрока № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
                     }
                 }
@@ -123,7 +126,6 @@ module.exports.MOEXsearchTax = MOEXsearchTax;
 async function MOEXsearchVolume(ID) { //суммирование оборотов по корпоративной облигации за последние n дней
     now = new Date();
     DateRequestPrevious = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 15}`; //этот день n дней назад
-
     const boardID = await MOEXboardID(ID)
     if (!boardID) {
         return
