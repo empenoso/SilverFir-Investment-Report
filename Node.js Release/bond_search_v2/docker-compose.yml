@@ -1,0 +1,16 @@
+---
+version: '3'
+services:
+  bond_search:
+    image: bond_search:latest
+    build: .
+    volumes:
+      - './out:/app/out/'
+    environment:
+      YieldMore: 7
+      YieldLess: 14
+      PriceMore: 95
+      PriceLess: 101
+      DurationMore: 1
+      DurationLess: 6
+      VolumeMore: 5000

@@ -1,18 +1,18 @@
 /**
  * SilverFir: Investment Report 🌲 [Node.js Release]
  * https://fir.icu/
- * 
+ *
  * Модуль поиска облигаций по параметрам [bond_search_v2/index.js]
- * 
+ *
  * Запуск под Linux: $ npm start
  * Запуск под Windows: start.bat
- * Подробности: https://habr.com/ru/post/506720/ 
+ * Подробности: https://habr.com/ru/post/506720/
  *
- * @author Mikhail Shardin [Михаил Шардин] 
+ * @author Mikhail Shardin [Михаил Шардин]
  * https://www.facebook.com/mikhail.shardin/
- * 
+ *
  * Last updated: 23.05.2020
- * 
+ *
  */
 
 bond_search_v2()
@@ -37,16 +37,16 @@ async function bond_search_v2() {
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 7 //Доходность больше этой цифры
-    const YieldLess = 14 //Доходность меньше этой цифры
-    const PriceMore = 95 //Цена больше этой цифры
-    const PriceLess = 101 //Цена меньше этой цифры
-    const DurationMore = 1 //Дюрация больше этой цифры
-    const DurationLess = 6 //Дюрация меньше этой цифры
-    const VolumeMore = 5000 //Объем сделок за n дней, шт. больше этой цифры
+    const YieldMore = process.env.YieldMore || '7' //Доходность больше этой цифры
+    const YieldLess = process.env.YieldLess || '14' //Доходность меньше этой цифры
+    const PriceMore = process.env.PriceMore || '95' //Цена больше этой цифры
+    const PriceLess = process.env.PriceLess || '101' //Цена меньше этой цифры
+    const DurationMore = process.env.DurationMore || '1' //Дюрация больше этой цифры
+    const DurationLess = process.env.DurationLess || '6' //Дюрация меньше этой цифры
+    const VolumeMore = process.env.VolumeMore //Объем сделок за n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
-                        <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
+                        <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li>
                         <li>Объем сделок за n дней > ${VolumeMore} шт.</li>
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
     var bonds = [
@@ -75,7 +75,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                 SECID = json.securities.data[i][0]
                 BondPrice = json.securities.data[i][2]
                 BondYield = json.marketdata.data[i][1]
-                BondDuration = Math.floor((json.marketdata.data[i][2] / 30) * 100) / 100 // кол-во оставшихся месяцев 
+                BondDuration = Math.floor((json.marketdata.data[i][2] / 30) * 100) / 100 // кол-во оставшихся месяцев
                 console.log('%s. Работа со строкой %s из %s: %s (%s).', getFunctionName(), (i + 1), count, BondName, SECID)
                 log += '<li>Работа со строкой ' + (i + 1) + ' из ' + count + ': ' + SECID + ' (' + BondYield + '%, ' + BondPrice + ').</li>'
                 if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
@@ -232,7 +232,8 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
     </body>
 
     </html>`
-    fs.writeFileSync(`./bond_search_${new Date().toLocaleString().replace(/\:/g, '-')}.html`, hmtl)
+    var out_file_name = './out/bond_search-' + now.getFullYear() + "-" + now.getMonth() + "-" + now.getDate() + "-"+ now.getHours() + "-" + now.getMinutes() +'.html'
+    fs.writeFileSync(out_file_name, hmtl)
 
 }
 module.exports.HTMLgenerate = HTMLgenerate;
