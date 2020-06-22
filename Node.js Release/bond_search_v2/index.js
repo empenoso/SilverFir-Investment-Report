@@ -7,7 +7,9 @@
  * Запуск под Linux: $ npm start
  * Запуск под Windows: start.bat
  * Подробности: https://habr.com/ru/post/506720/ 
- *
+ * 
+ * Docker fork: https://github.com/supaflyster/SilverFir-Investment-Report
+ * 
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://www.facebook.com/mikhail.shardin/
  * 
