@@ -43,7 +43,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     const PriceLess = process.env.PriceLess || '101' //Цена меньше этой цифры
     const DurationMore = process.env.DurationMore || '1' //Дюрация больше этой цифры
     const DurationLess = process.env.DurationLess || '6' //Дюрация меньше этой цифры
-    const VolumeMore = process.env.VolumeMore //Объем сделок за n дней, шт. больше этой цифры
+    const VolumeMore = process.env.VolumeMore || '5000' //Объем сделок за n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li>
