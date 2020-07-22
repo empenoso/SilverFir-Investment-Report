@@ -7,24 +7,23 @@
  * Запуск под Linux: $ npm start
  * Запуск под Windows: start.bat
  * Подробности: https://habr.com/ru/post/506720/ 
- * 
- * Docker fork: https://github.com/supaflyster/SilverFir-Investment-Report
- * 
+ *
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://www.facebook.com/mikhail.shardin/
  * 
- * Last updated: 23.05.2020
+ * Last updated: 22.07.2020
  * 
  */
 
-bond_search_v2()
+start()
 
-async function bond_search_v2() {
+async function start() {
     let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
     console.log("Функция %s начала работу в %s. \n", getFunctionName(), (new Date()).toLocaleString())
 
     global.fetch = require("node-fetch")
     global.fs = require("fs")
+    global.path = require('path')
 
     await MOEXsearchBonds()
 
@@ -33,23 +32,24 @@ async function bond_search_v2() {
     console.log("\nФункция %s закончила работу в %s.", getFunctionName(), (new Date()).toLocaleString())
     console.log("Время выполнения %s в минутах: %s.", getFunctionName(), duration)
 }
+module.exports.start = start;
 
 /**
  * Основная функция
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 7 //Доходность больше этой цифры
+    const YieldMore = 8 //Доходность больше этой цифры
     const YieldLess = 14 //Доходность меньше этой цифры
-    const PriceMore = 95 //Цена больше этой цифры
-    const PriceLess = 101 //Цена меньше этой цифры
-    const DurationMore = 1 //Дюрация больше этой цифры
-    const DurationLess = 6 //Дюрация меньше этой цифры
-    const VolumeMore = 5000 //Объем сделок за n дней, шт. больше этой цифры
+    const PriceMore = 97 //Цена больше этой цифры
+    const PriceLess = 102 //Цена меньше этой цифры
+    const DurationMore = 6 //Дюрация больше этой цифры
+    const DurationLess = 36 //Дюрация меньше этой цифры
+    const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
-                        <li>Объем сделок за n дней > ${VolumeMore} шт.</li>
+                        <li>Объем сделок в каждый из n последних дней > ${VolumeMore} шт.</li>
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
     var bonds = [
         // ["BondName", "SECID", "BondPrice", "BondVolume", "BondYield", "BondDuration", "BondTax"],
@@ -58,15 +58,15 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     var log = `<li>Поиск начат ${new Date().toLocaleString()}.</li>`
     for (const t of [7, 58, 193]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
         const url = `https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/${t}/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION`
-        console.log('%s. Ссылка поиска всех доступных облигаций группы: %s', getFunctionName(), url)
-        log += '<li><b>Ссылка поиска всех доступных облигаций группы: ' + url + '.</b></li>'
+        console.log(`${getFunctionName()}. Ссылка поиска всех доступных облигаций группы: ${url}.`)
+        log += `<li><b>Ссылка поиска всех доступных облигаций группы ${t}: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
         try {
             const response = await fetch(url)
             const json = await response.json()
-            if (json.marketdata.data[0][1] == 0) {
-                console.log('%s. Нет данных c Московской биржи. Проверьте вручную по ссылке выше.', getFunctionName())
-                break
-            }
+            // if (json.marketdata.data[0][1] == 0) {
+            //     console.log('%s. Нет данных c Московской биржи. Проверьте вручную по ссылке выше.', getFunctionName())
+            //     break
+            // }
             let list = json.securities.data
             count = list.length
             console.log('%s. Всего в списке: %s бумаг.', getFunctionName(), count)
@@ -78,29 +78,37 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                 BondPrice = json.securities.data[i][2]
                 BondYield = json.marketdata.data[i][1]
                 BondDuration = Math.floor((json.marketdata.data[i][2] / 30) * 100) / 100 // кол-во оставшихся месяцев 
-                console.log('%s. Работа со строкой %s из %s: %s (%s).', getFunctionName(), (i + 1), count, BondName, SECID)
-                log += '<li>Работа со строкой ' + (i + 1) + ' из ' + count + ': ' + SECID + ' (' + BondYield + '%, ' + BondPrice + ').</li>'
+                console.log(`${getFunctionName()}. Строка ${i + 1} из ${count}: ${BondName} (${SECID}): цена=${BondPrice}%, доходность=${BondYield}%.`)
+                log += '<li>Строка ' + (i + 1) + ' из ' + count + ': ' + BondName + ' (' + SECID + '): цена=' + BondPrice + '%, доходность=' + BondYield + '%.</li>'
                 if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
                     BondPrice > PriceMore && BondPrice < PriceLess &&
                     BondDuration > DurationMore && BondDuration < DurationLess) {
-
-                    BondVolume = await MOEXsearchVolume(SECID)
+                    console.log(`${getFunctionName()}. \\-> Условие доходности (${BondYield}%), цены (${BondPrice}%) и дюрации (${BondDuration} мес.) прошло.`)
+                    volume = await MOEXsearchVolume(SECID, VolumeMore)
+                    BondVolume = volume.value
+                    log += volume.log
                     if (BondVolume > VolumeMore) { //если оборот в бумагах больше этой цифры
                         BondTax = await MOEXsearchTax(SECID)
                         bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, BondTax])
                         console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
-                        log += '<li><b>Cтрока № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                        log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
                     }
                 }
             }
         } catch (e) {
-            console.log('Ошибка в %s', getFunctionName())
+            console.log(`Ошибка в ${getFunctionName()}: ${e}.`)
             log += '<li>Ошибка в  ' + getFunctionName() + '.</li>'
         }
     }
     if (bonds == 0) {
         return "В массиве нет строк"
     }
+    bonds.sort(function (x, y) { // сортировка по столбцу Объем сделок за n дней, шт.
+        var xp = x[3];
+        var yp = y[3];
+        return xp == yp ? 0 : xp > yp ? -1 : 1;
+    });
+    log += `<li>Поиск завершён ${new Date().toLocaleString()}.</li>`
     await HTMLgenerate(bonds, conditions, log)
 }
 module.exports.MOEXsearchBonds = MOEXsearchBonds;
@@ -126,7 +134,7 @@ async function MOEXsearchTax(ID) { //налоговые льготы для ко
 }
 module.exports.MOEXsearchTax = MOEXsearchTax;
 
-async function MOEXsearchVolume(ID) { //суммирование оборотов по корпоративной облигации за последние n дней
+async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок в каждый из n дней больше определенного порога
     now = new Date();
     DateRequestPrevious = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 15}`; //этот день n дней назад
     const boardID = await MOEXboardID(ID)
@@ -136,7 +144,9 @@ async function MOEXsearchVolume(ID) { //суммирование оборото�
     const url = `https://iss.moex.com/iss/history/engines/stock/markets/bonds/boards/${boardID}/securities/${ID}.json?iss.meta=off&iss.only=history&history.columns=SECID,TRADEDATE,VOLUME,NUMTRADES&limit=20&from=${DateRequestPrevious}`
     // numtrades - Минимальное количество сделок с бумагой
     // VOLUME - оборот в количестве бумаг (Объем сделок, шт)
-    console.log('%s. Ссылка для %s: %s', getFunctionName(), ID, url)
+    var log = ''
+    console.log('%s. Ссылка для поиска объёма сделок %s: %s', getFunctionName(), ID, url)
+    log += `<li>Поиск оборота. Ссылка: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
     try {
         const response = await fetch(url)
         const json = await response.json()
@@ -144,11 +154,25 @@ async function MOEXsearchVolume(ID) { //суммирование оборото�
         let count = list.length
         var volume_sum = 0
         for (var i = 0; i <= count - 1; i++) {
-            volume = json.history.data[i][2];
+            volume = json.history.data[i][2]
             volume_sum += volume
+            if (thresholdValue > volume) {
+                console.log(`${getFunctionName()}. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.`)
+                log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`
+                return {
+                    value: thresholdValue,
+                    log: log
+                }
+            }
         }
-        console.log("%s. Оборот в бумагах (объем сделок, шт) для %s за последние %s дней: %s штук.", getFunctionName(), ID, count, volume_sum);
-        return volume_sum
+        console.log(`${getFunctionName()}. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.`)
+        console.log(`${getFunctionName()}. Итоговый оборот в бумагах (объем сделок, шт) за ${count} дней: ${volume_sum} шт нарастающим итогом.`)
+        log += `<li>Поиск оборота. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.</li>`
+        log += `<li>Поиск оборота. Итоговый оборот в бумагах (объем сделок, шт) за ${count} дней: ${volume_sum} шт нарастающим итогом.</li>`
+        return {
+            value: volume_sum,
+            log: log
+        }
     } catch (e) {
         console.log('Ошибка в %s', getFunctionName())
     }
@@ -219,7 +243,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
             <small>(JavaScript в этом браузере отключён, поэтому таблица не динамическая)</small>
         </noscript>
         <div id="table_div"></div>
-        <p>Выборка сгенерирована ${new Date().toLocaleString()} по условиям 📜:
+        <p>Выборка сгенерирована ${new Date().toLocaleString()} по условиям 🔎:
         <ul>
             ${conditions}
         </ul>
@@ -234,7 +258,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
     </body>
 
     </html>`
-    fs.writeFileSync(`./bond_search_${new Date().toLocaleString().replace(/\:/g, '-')}.html`, hmtl)
+    fs.writeFileSync(path.resolve(__dirname, `./bond_search_${new Date().toLocaleDateString()}.html`), hmtl)
 
 }
 module.exports.HTMLgenerate = HTMLgenerate;
@@ -264,4 +288,3 @@ function makeTableHTML(bonds) { //генерируем html таблицу из 
 function getFunctionName() { //автоматически получаем имя функции
     return (new Error()).stack.split('\n')[2].split(' ')[5];
 }
-module.exports.getFunctionName = getFunctionName;
