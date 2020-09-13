@@ -11,7 +11,7 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://www.facebook.com/mikhail.shardin/
  * 
- * Last updated: 22.07.2020
+ * Last updated: 10.09.2020
  * 
  */
 
@@ -24,6 +24,7 @@ async function start() {
     global.fetch = require("node-fetch")
     global.fs = require("fs")
     global.path = require('path')
+    global.moment = require('moment')
 
     await MOEXsearchBonds()
 
@@ -39,17 +40,17 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 8 //Доходность больше этой цифры
+    const YieldMore = 7 //Доходность больше этой цифры
     const YieldLess = 14 //Доходность меньше этой цифры
     const PriceMore = 97 //Цена больше этой цифры
     const PriceLess = 102 //Цена меньше этой цифры
     const DurationMore = 6 //Дюрация больше этой цифры
     const DurationLess = 36 //Дюрация меньше этой цифры
-    const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const VolumeMore = 500 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
-                        <li>Объем сделок в каждый из n последних дней > ${VolumeMore} шт.</li>
+                        <li>Объем сделок в каждый из 15 последних дней (c ${moment().subtract(15, 'days').format('DD.MM.YYYY')}) > ${VolumeMore} шт.</li>
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
     var bonds = [
         // ["BondName", "SECID", "BondPrice", "BondVolume", "BondYield", "BondDuration", "BondTax"],
@@ -87,7 +88,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     volume = await MOEXsearchVolume(SECID, VolumeMore)
                     BondVolume = volume.value
                     log += volume.log
-                    if (BondVolume > VolumeMore) { //если оборот в бумагах больше этой цифры
+                    if (volume.lowLiquid == 0) { //если оборот в бумагах больше заданной цифры в день
                         BondTax = await MOEXsearchTax(SECID)
                         bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, BondTax])
                         console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
@@ -109,6 +110,8 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
         return xp == yp ? 0 : xp > yp ? -1 : 1;
     });
     log += `<li>Поиск завершён ${new Date().toLocaleString()}.</li>`
+
+    console.log(`${getFunctionName()}. Выборка: ${JSON.stringify(bonds[0,1])}, ...`)
     await HTMLgenerate(bonds, conditions, log)
 }
 module.exports.MOEXsearchBonds = MOEXsearchBonds;
@@ -136,7 +139,7 @@ module.exports.MOEXsearchTax = MOEXsearchTax;
 
 async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок в каждый из n дней больше определенного порога
     now = new Date();
-    DateRequestPrevious = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 15}`; //этот день n дней назад
+    DateRequestPrevious = moment().subtract(15, 'days').format('YYYY-MM-DD') // `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate() - 15}`; //этот день n дней назад
     const boardID = await MOEXboardID(ID)
     if (!boardID) {
         return
@@ -153,16 +156,14 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
         let list = json.history.data
         let count = list.length
         var volume_sum = 0
+        var lowLiquid = 0
         for (var i = 0; i <= count - 1; i++) {
             volume = json.history.data[i][2]
             volume_sum += volume
             if (thresholdValue > volume) {
+                var lowLiquid = 1
                 console.log(`${getFunctionName()}. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.`)
-                log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`
-                return {
-                    value: thresholdValue,
-                    log: log
-                }
+                log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`                
             }
         }
         console.log(`${getFunctionName()}. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.`)
@@ -170,6 +171,7 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
         log += `<li>Поиск оборота. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.</li>`
         log += `<li>Поиск оборота. Итоговый оборот в бумагах (объем сделок, шт) за ${count} дней: ${volume_sum} шт нарастающим итогом.</li>`
         return {
+            lowLiquid: lowLiquid,
             value: volume_sum,
             log: log
         }
@@ -204,7 +206,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
 
     <head>
         <meta charset="utf-8">
-        <title>Мосбиржа. Фильтр облигаций</title>
+        <title>🕵️ Мосбиржа. Фильтр облигаций</title>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script type="text/javascript">
             google.charts.load('current', {
@@ -218,7 +220,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
                 data.addColumn('string', 'Полное наименование');
                 data.addColumn('string', 'Код ценной бумаги');
                 data.addColumn('number', 'Цена, %');
-                data.addColumn('number', 'Объем сделок за n дней, шт.');
+                data.addColumn('number', 'Объем сделок с ${moment().subtract(15, 'days').format('DD.MM.YYYY')}, шт.');
                 data.addColumn('number', 'Доходность');
                 data.addColumn('number', 'Дюрация, месяцев');
                 data.addColumn('boolean', 'Есть льгота?');
@@ -258,8 +260,13 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
     </body>
 
     </html>`
-    fs.writeFileSync(path.resolve(__dirname, `./bond_search_${new Date().toLocaleDateString()}.html`), hmtl)
 
+    try {
+        fs.writeFileSync(path.resolve(__dirname, `./bond_search_${moment().format('YYYY-MM-DD')}.html`), hmtl)
+        console.log(`\nЗаписано на диск с именем ${moment().format('YYYY-MM-DD')}.html`)
+    } catch (e) {
+        console.log('Ошибка в %s', getFunctionName())
+    }
 }
 module.exports.HTMLgenerate = HTMLgenerate;
 
