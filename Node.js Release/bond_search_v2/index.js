@@ -11,7 +11,7 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://www.facebook.com/mikhail.shardin/
  * 
- * Last updated: 10.09.2020
+ * Last updated: 27.09.2020
  * 
  */
 
@@ -40,10 +40,10 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 7 //Доходность больше этой цифры
-    const YieldLess = 14 //Доходность меньше этой цифры
+    const YieldMore = 9 //Доходность больше этой цифры
+    const YieldLess = 13 //Доходность меньше этой цифры
     const PriceMore = 97 //Цена больше этой цифры
-    const PriceLess = 102 //Цена меньше этой цифры
+    const PriceLess = 103 //Цена меньше этой цифры
     const DurationMore = 6 //Дюрация больше этой цифры
     const DurationLess = 36 //Дюрация меньше этой цифры
     const VolumeMore = 500 //Объем сделок в каждый из n дней, шт. больше этой цифры
@@ -88,7 +88,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     volume = await MOEXsearchVolume(SECID, VolumeMore)
                     BondVolume = volume.value
                     log += volume.log
-                    if (volume.lowLiquid == 0) { //если оборот в бумагах больше заданной цифры в день
+                    if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 просто переключатели. 1 - если за какой-то из дней оборот был меньше заданного
                         BondTax = await MOEXsearchTax(SECID)
                         bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, BondTax])
                         console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
