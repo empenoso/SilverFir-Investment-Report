@@ -6,12 +6,13 @@
  * 
  * Запуск под Linux: $ npm start
  * Запуск под Windows: start.bat
- * Подробности: https://habr.com/ru/post/506720/ 
+ * В 2020 году: https://habr.com/ru/post/506720/ 
+ * В 2021 году: https://habr.com/ru/post/ХХХХХХ/ 
  *
  * @author Mikhail Shardin [Михаил Шардин] 
- * https://www.facebook.com/mikhail.shardin/
+ * https://shardin.name/
  * 
- * Last updated: 27.10.2020
+ * Last updated: 12.12.2020
  * 
  */
 
@@ -40,10 +41,10 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 9 //Доходность больше этой цифры
+    const YieldMore = 10 //Доходность больше этой цифры
     const YieldLess = 13 //Доходность меньше этой цифры
     const PriceMore = 97 //Цена больше этой цифры
-    const PriceLess = 103 //Цена меньше этой цифры
+    const PriceLess = 102 //Цена меньше этой цифры
     const DurationMore = 6 //Дюрация больше этой цифры
     const DurationLess = 36 //Дюрация меньше этой цифры
     const VolumeMore = 500 //Объем сделок в каждый из n дней, шт. больше этой цифры
@@ -88,7 +89,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     volume = await MOEXsearchVolume(SECID, VolumeMore)
                     BondVolume = volume.value
                     log += volume.log
-                    if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 просто переключатели. 1 - если за какой-то из дней оборот был меньше заданного
+                    if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 - переключатели. 1 - если за какой-то из дней оборот был меньше заданного
                         BondTax = await MOEXsearchTax(SECID)
                         bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, BondTax])
                         console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
@@ -163,7 +164,7 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
             if (thresholdValue > volume) {
                 var lowLiquid = 1
                 console.log(`${getFunctionName()}. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.`)
-                log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`                
+                log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`
             }
         }
         console.log(`${getFunctionName()}. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.`)
@@ -245,11 +246,12 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
             <small>(JavaScript в этом браузере отключён, поэтому таблица не динамическая)</small>
         </noscript>
         <div id="table_div"></div>
-        <p>Выборка сгенерирована ${new Date().toLocaleString()} по условиям 🔎:
+        <p>Выборка сгенерирована ${moment().format('DD.MM.YYYY')} по условиям 🔎:
         <ul>
             ${conditions}
         </ul>
-        Составил <a href="https://www.facebook.com/mikhail.shardin" target="_blank"> Михаил Шардин</a>.</p>
+        Составил <a href="https://shardin.name/" target="_blank"> Михаил Шардин</a> в ${moment().format('YYYY')} году.<br>
+        <small>Подробнее про скрипт поиска <a href="https://habr.com/ru/post/506720/ " target="_blank">в статье на Хабре</a>.</small></p>
         <details>
             <summary>Техническая информация</summary><small>
                 <ol>
@@ -262,7 +264,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
     </html>`
 
     try {
-        fs.writeFileSync(path.resolve(__dirname, `./bond_search_${moment().format('YYYY-MM-DD')}.html`), hmtl)
+        fs.writeFileSync(path.resolve(__dirname, `./searching_results/bond_search_${moment().format('YYYY-MM-DD')}.html`), hmtl)
         console.log(`\nЗаписано на диск с именем ${moment().format('YYYY-MM-DD')}.html`)
     } catch (e) {
         console.log('Ошибка в %s', getFunctionName())
