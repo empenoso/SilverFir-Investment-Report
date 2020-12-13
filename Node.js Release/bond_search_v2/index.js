@@ -6,13 +6,14 @@
  * 
  * Запуск под Linux: $ npm start
  * Запуск под Windows: start.bat
- * В 2020 году: https://habr.com/ru/post/506720/ 
- * В 2021 году: https://habr.com/ru/post/ХХХХХХ/ 
+ * 
+ * Описание: https://habr.com/ru/post/506720/ (2020 год)
+ * Описание: https://habr.com/ru/post/532756/ (2021 год)
  *
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 12.12.2020
+ * Last updated: 13.12.2020
  * 
  */
 
@@ -41,13 +42,13 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 10 //Доходность больше этой цифры
+    const YieldMore = 7 //Доходность больше этой цифры
     const YieldLess = 13 //Доходность меньше этой цифры
     const PriceMore = 97 //Цена больше этой цифры
     const PriceLess = 102 //Цена меньше этой цифры
-    const DurationMore = 6 //Дюрация больше этой цифры
-    const DurationLess = 36 //Дюрация меньше этой цифры
-    const VolumeMore = 500 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const DurationMore = 3 //Дюрация больше этой цифры
+    const DurationLess = 12 //Дюрация меньше этой цифры
+    const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
@@ -90,8 +91,8 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     BondVolume = volume.value
                     log += volume.log
                     if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 - переключатели. 1 - если за какой-то из дней оборот был меньше заданного
-                        BondTax = await MOEXsearchTax(SECID)
-                        bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, BondTax])
+                        MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
+                        bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPayments])
                         console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
                         log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
                     }
@@ -120,23 +121,6 @@ module.exports.MOEXsearchBonds = MOEXsearchBonds;
 /**
  * Дополнительные функции
  */
-
-async function MOEXsearchTax(ID) { //налоговые льготы для корпоративных облигаций, выпущенных с 1 января 2017 года
-    const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=description`
-    console.log('%s. Ссылка для %s: %s', getFunctionName(), ID, url)
-    try {
-        const response = await fetch(url)
-        const json = await response.json()
-        STARTDATEMOEX = json.description.data.find(e => e[0] === 'STARTDATEMOEX')[2];
-        // DAYSTOREDEMPTION = json.description.data.find(e => e[0] === 'DAYSTOREDEMPTION')[2]; //получение кол-ва оставшихся дней по погашения
-        console.log("%s. Дата принятия решения о включении ценной бумаги в Список для %s: %s.", getFunctionName(), ID, STARTDATEMOEX);
-        const trueFalse = new Date(STARTDATEMOEX) > new Date('2017-01-01')
-        return trueFalse
-    } catch (e) {
-        console.log('Ошибка в %s', getFunctionName())
-    }
-}
-module.exports.MOEXsearchTax = MOEXsearchTax;
 
 async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок в каждый из n дней больше определенного порога
     now = new Date();
@@ -167,9 +151,11 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
                 log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`
             }
         }
-        console.log(`${getFunctionName()}. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.`)
+        if (lowLiquid != 1) {
+            console.log(`${getFunctionName()}. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.`)
+            log += `<li>Поиск оборота. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.</li>`
+        }
         console.log(`${getFunctionName()}. Итоговый оборот в бумагах (объем сделок, шт) за ${count} дней: ${volume_sum} шт нарастающим итогом.`)
-        log += `<li>Поиск оборота. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.</li>`
         log += `<li>Поиск оборота. Итоговый оборот в бумагах (объем сделок, шт) за ${count} дней: ${volume_sum} шт нарастающим итогом.</li>`
         return {
             lowLiquid: lowLiquid,
@@ -196,6 +182,71 @@ async function MOEXboardID(ID) { //узнаем boardid любой бумаги 
 }
 module.exports.MOEXboardID = MOEXboardID;
 
+async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, когда происходят выплаты
+    const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons`
+    console.log('%s. Ссылка для поиска месяцев выплат %s: %s', getFunctionName(), ID, url)
+    try {
+        const response = await fetch(url)
+        const json = await response.json()
+        var couponDates = []
+        for (var i = 0; i <= json.coupons.data.length - 1; i++) {
+            coupondate = json.coupons.data[i][3]
+            inFuture = new Date(coupondate) > new Date()
+            if (inFuture == true) {
+                couponDates.push(+coupondate
+                    .split("-")[1]
+                )
+                // console.log(`${getFunctionName()}. Купон для ${ID} выплачивается в месяц ${JSON.stringify(couponDates[couponDates.length - 1])} (строка ${couponDates.length}).`)
+            }
+        }
+        let uniqueDates = [...new Set(couponDates)] // уникальные значения месяцев
+        uniqueDates = uniqueDates.sort(function (a, b) {
+            return a - b;
+        })
+        // console.log(`${getFunctionName()}. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.`)        
+        let formattedDates = ''
+        for (let y = 1; y < 13; y++) {
+            formattedDates += uniqueDates.includes(y) ? `${y}` : `–––`
+            formattedDates += y == 12 ? `` : `-` // -
+        }
+        formattedDates = formattedDates
+            .replace(/1-/g, 'янв-')
+            .replace(/2-/g, 'фев-')
+            .replace(/3-/g, 'мар-')
+            .replace(/4-/g, 'апр-')
+            .replace(/5-/g, 'май-')
+            .replace(/6-/g, 'июн-')
+            .replace(/7-/g, 'июл-')
+            .replace(/8-/g, 'авг-')
+            .replace(/9-/g, 'сен-')
+            .replace(/10-/g, 'окт-')
+            .replace(/11-/g, 'ноя-')
+            .replace(/-12/g, '-дек')
+        console.log(`${getFunctionName()}. Сформатированная строка вывода в которой есть месяцы выплат: ${formattedDates}.`)
+        return formattedDates
+    } catch (e) {
+        console.log('Ошибка в %s', getFunctionName())
+    }
+}
+module.exports.MOEXsearchMonthsOfPayments = MOEXsearchMonthsOfPayments;
+
+async function MOEXsearchTax(ID) { //налоговые льготы для корпоративных облигаций, выпущенных с 1 января 2017 года. Неактуально с 1 января 2021 года
+    const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=description`
+    console.log('%s. Ссылка для %s: %s', getFunctionName(), ID, url)
+    try {
+        const response = await fetch(url)
+        const json = await response.json()
+        STARTDATEMOEX = json.description.data.find(e => e[0] === 'STARTDATEMOEX')[2];
+        // DAYSTOREDEMPTION = json.description.data.find(e => e[0] === 'DAYSTOREDEMPTION')[2]; //получение кол-ва оставшихся дней по погашения
+        console.log("%s. Дата принятия решения о включении ценной бумаги в Список для %s: %s.", getFunctionName(), ID, STARTDATEMOEX);
+        const trueFalse = new Date(STARTDATEMOEX) > new Date('2017-01-01')
+        return trueFalse
+    } catch (e) {
+        console.log('Ошибка в %s', getFunctionName())
+    }
+}
+module.exports.MOEXsearchTax = MOEXsearchTax;
+
 /**
  * Общие вспомогательные функции
  */
@@ -221,10 +272,10 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
                 data.addColumn('string', 'Полное наименование');
                 data.addColumn('string', 'Код ценной бумаги');
                 data.addColumn('number', 'Цена, %');
-                data.addColumn('number', 'Объем сделок с ${moment().subtract(15, 'days').format('DD.MM.YYYY')}, шт.');
+                data.addColumn('number', 'Объем сделок , шт.'); // с ${moment().subtract(15, 'days').format('DD.MM.YYYY')}
                 data.addColumn('number', 'Доходность');
                 data.addColumn('number', 'Дюрация, месяцев');
-                data.addColumn('boolean', 'Есть льгота?');
+                data.addColumn('string', 'Месяцы выплат');
                 data.addRows(
                     ${JSON.stringify(bonds).replace(/\"/g, '\'')}
                 );
@@ -242,7 +293,21 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
 
     <body>
         <noscript>
-            ${makeTableHTML(bonds)}
+            ${makeTableHTML(bonds)
+                .replace(/янв/g, '01')
+                .replace(/фев/g, '02')
+                .replace(/мар/g, '03')
+                .replace(/апр/g, '04')
+                .replace(/май/g, '05')
+                .replace(/июн/g, '06')
+                .replace(/июл/g, '07')
+                .replace(/авг/g, '08')
+                .replace(/сен/g, '09')
+                .replace(/окт/g, '10')
+                .replace(/ноя/g, '11')
+                .replace(/дек/g, '12')
+                .replace(/\–\–\–/g, '––')
+            }
             <small>(JavaScript в этом браузере отключён, поэтому таблица не динамическая)</small>
         </noscript>
         <div id="table_div"></div>
@@ -250,8 +315,8 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
         <ul>
             ${conditions}
         </ul>
-        Составил <a href="https://shardin.name/" target="_blank"> Михаил Шардин</a> в ${moment().format('YYYY')} году.<br>
-        <small>Подробнее про скрипт поиска <a href="https://habr.com/ru/post/506720/ " target="_blank">в статье на Хабре</a>.</small></p>
+        Составил <a href="https://github.com/empenoso" target="_blank"> Михаил Шардин</a>.<br>
+        <small>Подробнее про скрипт поиска ликвидных облигаций <a href="https://habr.com/ru/post/532756/ " target="_blank">в статье на Хабре</a>.</small></p>
         <details>
             <summary>Техническая информация</summary><small>
                 <ol>
@@ -281,7 +346,7 @@ function makeTableHTML(bonds) { //генерируем html таблицу из 
             <td>Объем сделок за n дней, шт.</td>
             <td>Доходность</td>
             <td>Дюрация, месяцев</td>
-            <td>Есть льгота?</td>
+            <td>Месяцы выплат</td>
         </tr>`
     for (var i = 0; i < bonds.length; i++) {
         result += "<tr>";

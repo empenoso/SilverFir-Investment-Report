@@ -1,11 +1,12 @@
 {
   "name": "moex-bond-search",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Модуль поиска облигаций по параметрам на Московской бирже.",
   "homepage": "https://fir.icu/",
   "main": "index.js",
   "dependencies": {
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.0",
+    "moment": ""
   },
   "scripts": {
     "start": "node index.js"
@@ -19,6 +20,6 @@
     "bonds",
     "search"
   ],
-  "author": "Mikhail Shardin [Михаил Шардин] (https://www.facebook.com/mikhail.shardin/)",
+  "author": "Mikhail Shardin [Михаил Шардин] (https://shardin.name/)",
   "license": "Apache-2.0"
 }
