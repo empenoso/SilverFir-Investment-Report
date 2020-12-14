@@ -8,7 +8,7 @@
  * Запуск под Windows: start.bat
  * 
  * Описание: https://habr.com/ru/post/506720/ (2020 год)
- * Описание: https://habr.com/ru/post/532756/ (2021 год)
+ * Описание: https://habr.com/ru/post/533016/ (2021 год)
  *
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
@@ -316,7 +316,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
             ${conditions}
         </ul>
         Составил <a href="https://github.com/empenoso" target="_blank"> Михаил Шардин</a>.<br>
-        <small>Подробнее про скрипт поиска ликвидных облигаций <a href="https://habr.com/ru/post/532756/ " target="_blank">в статье на Хабре</a>.</small></p>
+        <small>Подробнее про скрипт поиска ликвидных облигаций <a href="https://habr.com/ru/post/533016/ " target="_blank">в статье на Хабре</a>.</small></p>
         <details>
             <summary>Техническая информация</summary><small>
                 <ol>
