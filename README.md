@@ -27,6 +27,8 @@
 
 * * * * *
 ### Поиск ликвидных облигаций на Мосбирже в качестве замены депозита
+:round_pushpin: Поиск замены депозита в облигациях с учетом того, что с 1 января 2021 года все выплаты облагаются налогами на [Хабре](https://habr.com/ru/post/533016/) (январь 2021 г).
+
 :round_pushpin: Версия поиска в Гугл таблице [Т—Ж](https://journal.tinkoff.ru/moex-bond-search/) (август 2020 г).
 
 :round_pushpin: Форк с Docker версией (не обновляется): [GitHub](https://github.com/supaflyster/SilverFir-Investment-Report) (июнь 2020 г).
