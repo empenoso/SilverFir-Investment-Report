@@ -26,7 +26,7 @@
 :point_right: [Версия таблицы в этой редакции](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) на февраль 2020 г. :point_left:
 
 * * * * *
-### Поиск ликвидных облигаций на Мосбирже в качестве замены депозита
+### Скрипт поиска ликвидных облигаций на Мосбирже в качестве замены депозита
 :round_pushpin: С учётом измения налогообложения в 2021 году на [Хабре](https://habr.com/ru/post/533016/) (январь 2021 г).
 
 :round_pushpin: Версия поиска в Гугл таблице в статье [Т—Ж](https://journal.tinkoff.ru/moex-bond-search/) (август 2020 г).
