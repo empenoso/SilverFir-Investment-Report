@@ -28,7 +28,9 @@
 * * * * *
 ### Поиск ликвидных облигаций на Мосбирже в качестве замены депозита
 :round_pushpin: Версия поиска в Гугл таблице [Т—Ж](https://journal.tinkoff.ru/moex-bond-search/) (август 2020 г).
+
 :round_pushpin: Форк с Docker версией (не обновляется): [GitHub](https://github.com/supaflyster/SilverFir-Investment-Report) (июнь 2020 г).
+
 :round_pushpin: Node.js версия в статье на [Хабре](https://habr.com/ru/post/506720/) (июнь 2020 г).
 
 
