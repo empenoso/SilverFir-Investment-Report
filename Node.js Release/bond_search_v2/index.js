@@ -13,7 +13,7 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 13.12.2020
+ * Last updated: 02.01.2021
  * 
  */
 
@@ -21,7 +21,7 @@ start()
 
 async function start() {
     let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
-    console.log("Функция %s начала работу в %s. \n", getFunctionName(), (new Date()).toLocaleString())
+    console.log("Функция %s начала работу в %s. \n", getFunctionName(), (new Date()).toLocaleString("ru-RU"))
 
     global.fetch = require("node-fetch")
     global.fs = require("fs")
@@ -32,7 +32,7 @@ async function start() {
 
     let currTime = (new Date()).getTime();
     let duration = Math.round((currTime - startTime) / 1000 / 60 * 100) / 100; //время выполнения скрипта в минутах
-    console.log("\nФункция %s закончила работу в %s.", getFunctionName(), (new Date()).toLocaleString())
+    console.log("\nФункция %s закончила работу в %s.", getFunctionName(), (new Date()).toLocaleString("ru-RU"))
     console.log("Время выполнения %s в минутах: %s.", getFunctionName(), duration)
 }
 module.exports.start = start;
@@ -47,7 +47,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     const PriceMore = 97 //Цена больше этой цифры
     const PriceLess = 102 //Цена меньше этой цифры
     const DurationMore = 3 //Дюрация больше этой цифры
-    const DurationLess = 12 //Дюрация меньше этой цифры
+    const DurationLess = 15 //Дюрация меньше этой цифры
     const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
@@ -58,7 +58,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
         // ["BondName", "SECID", "BondPrice", "BondVolume", "BondYield", "BondDuration", "BondTax"],
     ]
     var count
-    var log = `<li>Поиск начат ${new Date().toLocaleString()}.</li>`
+    var log = `<li>Поиск начат ${new Date().toLocaleString("ru-RU")}.</li>`
     for (const t of [7, 58, 193]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
         const url = `https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/${t}/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION`
         console.log(`${getFunctionName()}. Ссылка поиска всех доступных облигаций группы: ${url}.`)
@@ -111,7 +111,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
         var yp = y[3];
         return xp == yp ? 0 : xp > yp ? -1 : 1;
     });
-    log += `<li>Поиск завершён ${new Date().toLocaleString()}.</li>`
+    log += `<li>Поиск завершён ${new Date().toLocaleString("ru-RU")}.</li>`
 
     console.log(`${getFunctionName()}. Выборка: ${JSON.stringify(bonds[0,1])}, ...`)
     await HTMLgenerate(bonds, conditions, log)
@@ -210,7 +210,7 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
             formattedDates += y == 12 ? `` : `-` // -
         }
         formattedDates = formattedDates
-            .replace(/1-/g, 'янв-')
+            .replace(/^1-/g, 'янв-')
             .replace(/2-/g, 'фев-')
             .replace(/3-/g, 'мар-')
             .replace(/4-/g, 'апр-')
@@ -221,7 +221,7 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
             .replace(/9-/g, 'сен-')
             .replace(/10-/g, 'окт-')
             .replace(/11-/g, 'ноя-')
-            .replace(/-12/g, '-дек')
+            .replace(/12/g, '-дек')
         console.log(`${getFunctionName()}. Сформатированная строка вывода в которой есть месяцы выплат: ${formattedDates}.`)
         return formattedDates
     } catch (e) {
