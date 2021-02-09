@@ -1,0 +1,15 @@
+{
+    "timeZone": "Asia/Yekaterinburg",
+    "dependencies": {},
+    "exceptionLogging": "STACKDRIVER",
+    "runtimeVersion": "V8",
+    "sheets": {
+        "macros": [{
+            "menuName": "1. Открыть описание работы таблицы",
+            "functionName": "showAnchor"
+        }, {
+            "menuName": "2. Искать по параметрам",
+            "functionName": "bond_search_v3"
+        }]
+    }
+}
