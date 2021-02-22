@@ -48,7 +48,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     const PriceLess = 102 //Цена меньше этой цифры
     const DurationMore = 3 //Дюрация больше этой цифры
     const DurationLess = 15 //Дюрация меньше этой цифры
-    const VolumeMore = 250 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
@@ -182,7 +182,7 @@ module.exports.MOEXboardID = MOEXboardID;
 
 async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, когда происходят выплаты
     const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons`
-    console.log('%s. Ссылка для поиска месяцев выплат %s: %s', getFunctionName(), ID, url)
+    console.log(`${getFunctionName()}. Ссылка для поиска месяцев выплат для ${ID}: ${url}.`)
     try {
         const response = await fetch(url)
         const json = await response.json()
