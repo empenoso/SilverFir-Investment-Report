@@ -13,7 +13,7 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 02.01.2021
+ * Last updated: 22.02.2021
  * 
  */
 
@@ -48,15 +48,13 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     const PriceLess = 102 //Цена меньше этой цифры
     const DurationMore = 3 //Дюрация больше этой цифры
     const DurationLess = 15 //Дюрация меньше этой цифры
-    const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const VolumeMore = 250 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
                         <li>Объем сделок в каждый из 15 последних дней (c ${moment().subtract(15, 'days').format('DD.MM.YYYY')}) > ${VolumeMore} шт.</li>
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
-    var bonds = [
-        // ["BondName", "SECID", "BondPrice", "BondVolume", "BondYield", "BondDuration", "BondTax"],
-    ]
+    var bonds = []
     var count
     var log = `<li>Поиск начат ${new Date().toLocaleString("ru-RU")}.</li>`
     for (const t of [7, 58, 193]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
@@ -86,7 +84,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                 if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
                     BondPrice > PriceMore && BondPrice < PriceLess &&
                     BondDuration > DurationMore && BondDuration < DurationLess) {
-                    console.log(`${getFunctionName()}. \\-> Условие доходности (${BondYield}%), цены (${BondPrice}%) и дюрации (${BondDuration} мес.) прошло.`)
+                    console.log(`${getFunctionName()}. \\-> Условие доходности (${BondYield}%), цены (${BondPrice}%) и дюрации (${BondDuration} мес.) для ${BondName} прошло.`)
                     volume = await MOEXsearchVolume(SECID, VolumeMore)
                     BondVolume = volume.value
                     log += volume.log
@@ -146,7 +144,7 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
             volume = json.history.data[i][2]
             volume_sum += volume
             if (thresholdValue > volume) {
-                var lowLiquid = 1
+                lowLiquid = 1
                 console.log(`${getFunctionName()}. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.`)
                 log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`
             }
@@ -174,7 +172,7 @@ async function MOEXboardID(ID) { //узнаем boardid любой бумаги 
         const response = await fetch(url)
         const json = await response.json()
         boardID = json.boards.data.find(e => e[2] === 1)[1]
-        console.log("%s. boardID для %s: %s", getFunctionName(), ID, boardID);
+        // console.log("%s. boardID для %s: %s", getFunctionName(), ID, boardID);
         return boardID
     } catch (e) {
         console.log('Ошибка в %s', getFunctionName())
