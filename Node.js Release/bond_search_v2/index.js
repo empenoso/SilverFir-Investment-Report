@@ -42,13 +42,13 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 7 //Доходность больше этой цифры
+    const YieldMore = 8 //Доходность больше этой цифры
     const YieldLess = 14 //Доходность меньше этой цифры
-    const PriceMore = 97 //Цена больше этой цифры
-    const PriceLess = 102 //Цена меньше этой цифры
-    const DurationMore = 3 //Дюрация больше этой цифры
-    const DurationLess = 18 //Дюрация меньше этой цифры
-    const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const PriceMore = 90 //Цена больше этой цифры
+    const PriceLess = 103 //Цена меньше этой цифры
+    const DurationMore = 6 //Дюрация больше этой цифры
+    const DurationLess = 20 //Дюрация меньше этой цифры
+    const VolumeMore = 290 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
