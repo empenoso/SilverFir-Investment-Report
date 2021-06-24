@@ -49,9 +49,13 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     const DurationMore = 3 //Дюрация больше этой цифры
     const DurationLess = 24 //Дюрация меньше этой цифры
     const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
+    // ДА - облигации только с известными цифрами выплаты купонов
+    // НЕТ - не важно, пусть в какие-то даты вместо выплаты прочерк
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
+                        <li>Рублёвые значения всех купонов известны до самого погашения: ${OfferYesNo}.</li> 
                         <li>Объем сделок в каждый из 15 последних дней (c ${moment().subtract(15, 'days').format('DD.MM.YYYY')}) > ${VolumeMore} шт.</li>
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
     var bonds = []
@@ -90,9 +94,19 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     log += volume.log
                     if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 - переключатели. 1 - если за какой-то из дней оборот был меньше заданного
                         MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
-                        bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPayments])
-                        console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
-                        log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                        MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
+                        MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
+                        log += MonthsOfPayments.log
+                        if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
+                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                            console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                            log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                        }
+                        if (OfferYesNo == "НЕТ") {
+                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                            console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                            log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                        }
                     }
                 }
             }
@@ -181,27 +195,39 @@ async function MOEXboardID(ID) { //узнаем boardid любой бумаги 
 module.exports.MOEXboardID = MOEXboardID;
 
 async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, когда происходят выплаты
+    var log = ''
     const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons`
     console.log(`${getFunctionName()}. Ссылка для поиска месяцев выплат для ${ID}: ${url}.`)
     try {
         const response = await fetch(url)
         const json = await response.json()
         var couponDates = []
+        var value_rubNull = 0
         for (var i = 0; i <= json.coupons.data.length - 1; i++) {
-            coupondate = json.coupons.data[i][3]
+            coupondate = json.coupons.data[i][3] // даты купона
+            value_rub = json.coupons.data[i][9] // сумма выплаты купона
             inFuture = new Date(coupondate) > new Date()
             if (inFuture == true) {
                 couponDates.push(+coupondate
                     .split("-")[1]
                 )
                 // console.log(`${getFunctionName()}. Купон для ${ID} выплачивается в месяц ${JSON.stringify(couponDates[couponDates.length - 1])} (строка ${couponDates.length}).`)
+                console.log(`${getFunctionName()}. Для ${ID} выплата ${coupondate} в размере ${value_rub} руб.`)
+                if (value_rub == null) {
+                    value_rubNull += 1
+                }
             }
+        }
+        if (value_rubNull > 0) {
+            console.log(`${getFunctionName()}. Для ${ID} есть ${value_rubNull} дат(ы) будущих платежей с неизвестным значением выплат.`)
+            log += `<li>Поиск выплат. Для ${ID} есть ${value_rubNull} дат(ы) будущих платежей с неизвестным значением выплат.</li>`
         }
         let uniqueDates = [...new Set(couponDates)] // уникальные значения месяцев
         uniqueDates = uniqueDates.sort(function (a, b) {
             return a - b;
         })
-        // console.log(`${getFunctionName()}. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.`)        
+        console.log(`${getFunctionName()}. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.`)        
+        log += `<li>Поиск выплат. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.</li>`
         let formattedDates = ''
         for (let y = 1; y < 13; y++) {
             formattedDates += uniqueDates.includes(y) ? `${y}` : `–––`
@@ -220,8 +246,13 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
             .replace(/10-/g, 'окт-')
             .replace(/11-/g, 'ноя-')
             .replace(/12/g, '-дек')
-        console.log(`${getFunctionName()}. Сформатированная строка вывода в которой есть месяцы выплат: ${formattedDates}.`)
-        return formattedDates
+        // console.log(`${getFunctionName()}. Сформатированная строка вывода в которой есть месяцы выплат: ${formattedDates}.`)
+        // log += `<li>Поиск выплат. Сформатированная строка вывода в которой есть месяцы выплат: ${formattedDates}.</li>`
+        return {
+            formattedDates: formattedDates,
+            value_rubNull: value_rubNull,
+            log: log
+        }
     } catch (e) {
         console.log('Ошибка в %s', getFunctionName())
     }
