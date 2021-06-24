@@ -44,18 +44,18 @@ module.exports.start = start;
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
     const YieldMore = 8 //Доходность больше этой цифры
     const YieldLess = 14 //Доходность меньше этой цифры
-    const PriceMore = 90 //Цена больше этой цифры
-    const PriceLess = 103 //Цена меньше этой цифры
+    const PriceMore = 70 //Цена больше этой цифры
+    const PriceLess = 102 //Цена меньше этой цифры
     const DurationMore = 3 //Дюрация больше этой цифры
     const DurationLess = 24 //Дюрация меньше этой цифры
-    const VolumeMore = 300 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const VolumeMore = 400 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
     // НЕТ - не важно, пусть в какие-то даты вместо выплаты прочерк
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
-                        <li>Рублёвые значения всех купонов известны до самого погашения: ${OfferYesNo}.</li> 
+                        <li>Значения всех купонов известны до самого погашения: ${OfferYesNo}.</li> 
                         <li>Объем сделок в каждый из 15 последних дней (c ${moment().subtract(15, 'days').format('DD.MM.YYYY')}) > ${VolumeMore} шт.</li>
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
     var bonds = []
@@ -196,7 +196,10 @@ module.exports.MOEXboardID = MOEXboardID;
 
 async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, когда происходят выплаты
     var log = ''
-    const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons`
+    const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons` 
+    // для бумаг с большим количеством выплат АПИ выводит только первые 19 выплат, например:
+    // https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/RU000A100CG7
+    // https://bonds.finam.ru/issue/details0251800002/default.asp
     console.log(`${getFunctionName()}. Ссылка для поиска месяцев выплат для ${ID}: ${url}.`)
     try {
         const response = await fetch(url)
