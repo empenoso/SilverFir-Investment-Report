@@ -13,7 +13,7 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 24.06.2021
+ * Last updated: 11.08.2021
  * 
  */
 
@@ -43,12 +43,12 @@ module.exports.start = start;
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
     const YieldMore = 8 //Доходность больше этой цифры
-    const YieldLess = 14 //Доходность меньше этой цифры
-    const PriceMore = 70 //Цена больше этой цифры
-    const PriceLess = 102 //Цена меньше этой цифры
+    const YieldLess = 17 //Доходность меньше этой цифры
+    const PriceMore = 50 //Цена больше этой цифры
+    const PriceLess = 103 //Цена меньше этой цифры
     const DurationMore = 3 //Дюрация больше этой цифры
     const DurationLess = 24 //Дюрация меньше этой цифры
-    const VolumeMore = 400 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const VolumeMore = 250 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
     // НЕТ - не важно, пусть в какие-то даты вместо выплаты прочерк
@@ -83,8 +83,8 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                 BondPrice = json.securities.data[i][2]
                 BondYield = json.marketdata.data[i][1]
                 BondDuration = Math.floor((json.marketdata.data[i][2] / 30) * 100) / 100 // кол-во оставшихся месяцев 
-                console.log(`${getFunctionName()}. Строка ${i + 1} из ${count}: ${BondName} (${SECID}): цена=${BondPrice}%, доходность=${BondYield}%.`)
-                log += '<li>Строка ' + (i + 1) + ' из ' + count + ': ' + BondName + ' (' + SECID + '): цена=' + BondPrice + '%, доходность=' + BondYield + '%.</li>'
+                console.log(`${getFunctionName()}. Строка ${i + 1} из ${count}: ${BondName} (${SECID}): цена=${BondPrice}%, доходность=${BondYield}%, дюрация=${BondDuration} мес.`)
+                log += '<li>Строка ' + (i + 1) + ' из ' + count + ': ' + BondName + ' (' + SECID + '): цена=' + BondPrice + '%, доходность=' + BondYield + '%, дюрация=' + BondDuration + ' мес.</li>'
                 if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
                     BondPrice > PriceMore && BondPrice < PriceLess &&
                     BondDuration > DurationMore && BondDuration < DurationLess) {
@@ -99,12 +99,14 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                         log += MonthsOfPayments.log
                         if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
                             bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                            console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                            console.log(`${getFunctionName()}. Для ${BondName} все даты будущих платежей с известным значением выплат.`)
+                            log += '<li>Для ' + BondName + ' все даты будущих платежей с известным значением выплат.</li>'
+                            console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
                             log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
                         }
                         if (OfferYesNo == "НЕТ") {
                             bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                            console.log('%s. Cтрока № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                            console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
                             log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
                         }
                     }
@@ -196,7 +198,7 @@ module.exports.MOEXboardID = MOEXboardID;
 
 async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, когда происходят выплаты
     var log = ''
-    const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons` 
+    const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons`
     // для бумаг с большим количеством выплат АПИ выводит только первые 19 выплат, например:
     // https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/RU000A100CG7
     // https://bonds.finam.ru/issue/details0251800002/default.asp
@@ -215,7 +217,7 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
                     .split("-")[1]
                 )
                 // console.log(`${getFunctionName()}. Купон для ${ID} выплачивается в месяц ${JSON.stringify(couponDates[couponDates.length - 1])} (строка ${couponDates.length}).`)
-                console.log(`${getFunctionName()}. Для ${ID} выплата ${coupondate} в размере ${value_rub} руб.`)
+                // console.log(`${getFunctionName()}. Для ${ID} выплата ${coupondate} в размере ${value_rub} руб.`)
                 if (value_rub == null) {
                     value_rubNull += 1
                 }
@@ -229,7 +231,7 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
         uniqueDates = uniqueDates.sort(function (a, b) {
             return a - b;
         })
-        console.log(`${getFunctionName()}. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.`)        
+        console.log(`${getFunctionName()}. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.`)
         log += `<li>Поиск выплат. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.</li>`
         let formattedDates = ''
         for (let y = 1; y < 13; y++) {
