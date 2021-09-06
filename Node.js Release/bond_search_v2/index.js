@@ -13,7 +13,7 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 11.08.2021
+ * Last updated: 07.09.2021
  * 
  */
 
@@ -43,12 +43,12 @@ module.exports.start = start;
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
     const YieldMore = 8 //Доходность больше этой цифры
-    const YieldLess = 17 //Доходность меньше этой цифры
-    const PriceMore = 50 //Цена больше этой цифры
-    const PriceLess = 103 //Цена меньше этой цифры
+    const YieldLess = 15 //Доходность меньше этой цифры
+    const PriceMore = 70 //Цена больше этой цифры
+    const PriceLess = 105 //Цена меньше этой цифры
     const DurationMore = 3 //Дюрация больше этой цифры
     const DurationLess = 24 //Дюрация меньше этой цифры
-    const VolumeMore = 250 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const VolumeMore = 350 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
     // НЕТ - не важно, пусть в какие-то даты вместо выплаты прочерк
@@ -92,7 +92,9 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     volume = await MOEXsearchVolume(SECID, VolumeMore)
                     BondVolume = volume.value
                     log += volume.log
-                    if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 - переключатели. 1 - если за какой-то из дней оборот был меньше заданного
+                    if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 - переключатели. 
+                        // 0 - чтобы оборот был строго больше заданного
+                        // 1 - фильтр оборота не учитывается, в выборку попадают все бумаги, подходящие по остальным параметрам
                         MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
                         MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
                         MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
@@ -109,6 +111,9 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                             console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
                             log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
                         }
+                    } else {
+                        console.log(`${getFunctionName()}. Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
+                        log += `<li>Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
                     }
                 }
             }
@@ -159,10 +164,15 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
         for (var i = 0; i <= count - 1; i++) {
             volume = json.history.data[i][2]
             volume_sum += volume
-            if (thresholdValue > volume) {
+            if (thresholdValue > volume) { // если оборот в конкретный день меньше 
                 lowLiquid = 1
                 console.log(`${getFunctionName()}. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.`)
                 log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`
+            }
+            if (count < 6) { // если всего дней в апи на этом периоде очень мало
+                lowLiquid = 1
+                console.log(`${getFunctionName()}. Всего в АПИ Мосбиржи доступно ${count} дней, а надо хотя бы больше 6 торговых дней с ${DateRequestPrevious}!`)
+                log += `<li>Поиск оборота. Всего в АПИ Мосбиржи доступно ${count} дней, а надо хотя бы больше 6 торговых дней с ${DateRequestPrevious}!</li>`
             }
         }
         if (lowLiquid != 1) {
