@@ -9,7 +9,7 @@
  * 
  * Описание: https://habr.com/ru/post/506720/ (2020 год)
  * Описание: https://habr.com/ru/post/533016/ (2021 год)
- *
+ * 
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
@@ -42,13 +42,14 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 8 //Доходность больше этой цифры
-    const YieldLess = 15 //Доходность меньше этой цифры
-    const PriceMore = 70 //Цена больше этой цифры
-    const PriceLess = 105 //Цена меньше этой цифры
-    const DurationMore = 3 //Дюрация больше этой цифры
-    const DurationLess = 24 //Дюрация меньше этой цифры
-    const VolumeMore = 350 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const YieldMore = 10 //Доходность больше этой цифры
+    const YieldLess = 40 //Доходность меньше этой цифры
+    const PriceMore = 60 //Цена больше этой цифры
+    const PriceLess = 110 //Цена меньше этой цифры
+    const DurationMore = 6 //Дюрация больше этой цифры
+    const DurationLess = 12 //Дюрация меньше этой цифры
+    const VolumeMore = 550 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const BondVolumeMore = 5000 // Совокупный объем сделок за n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
     // НЕТ - не важно, пусть в какие-то даты вместо выплаты прочерк
@@ -90,30 +91,32 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     BondDuration > DurationMore && BondDuration < DurationLess) {
                     console.log(`${getFunctionName()}. \\-> Условие доходности (${BondYield}%), цены (${BondPrice}%) и дюрации (${BondDuration} мес.) для ${BondName} прошло.`)
                     volume = await MOEXsearchVolume(SECID, VolumeMore)
-                    BondVolume = volume.value
+                    let BondVolume = volume.value
                     log += volume.log
-                    if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 - переключатели. 
-                        // 0 - чтобы оборот был строго больше заданного
-                        // 1 - фильтр оборота не учитывается, в выборку попадают все бумаги, подходящие по остальным параметрам
-                        MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
-                        MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
-                        MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
-                        log += MonthsOfPayments.log
-                        if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
-                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                            console.log(`${getFunctionName()}. Для ${BondName} все даты будущих платежей с известным значением выплат.`)
-                            log += '<li>Для ' + BondName + ' все даты будущих платежей с известным значением выплат.</li>'
-                            console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
-                            log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                    if (BondVolume > BondVolumeMore) {
+                        if (volume.lowLiquid == 1) { // lowLiquid: 0 и 1 - переключатели. 
+                            // 0 - чтобы оборот был строго больше заданного
+                            // 1 - фильтр оборота не учитывается, в выборку попадают все бумаги, подходящие по остальным параметрам
+                            MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
+                            MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
+                            MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
+                            log += MonthsOfPayments.log
+                            if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
+                                bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                                console.log(`${getFunctionName()}. Для ${BondName} все даты будущих платежей с известным значением выплат.`)
+                                log += '<li>Для ' + BondName + ' все даты будущих платежей с известным значением выплат.</li>'
+                                console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                                log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                            }
+                            if (OfferYesNo == "НЕТ") {
+                                bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                                console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                                log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                            }
+                        } else {
+                            console.log(`${getFunctionName()}. Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
+                            log += `<li>Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
                         }
-                        if (OfferYesNo == "НЕТ") {
-                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                            console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
-                            log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
-                        }
-                    } else {
-                        console.log(`${getFunctionName()}. Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
-                        log += `<li>Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
                     }
                 }
             }
@@ -123,6 +126,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
         }
     }
     if (bonds == 0) {
+        console.log(`${getFunctionName()}. В массиве нет строк.`)
         return "В массиве нет строк"
     }
     bonds.sort(function (x, y) { // сортировка по столбцу Объем сделок за n дней, шт.

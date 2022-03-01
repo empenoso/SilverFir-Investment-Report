@@ -1,0 +1,19 @@
+[Desktop Entry]
+Categories=
+Comment=Поиск замены депозита в облигациях
+Exec=node /home/mike/SynologyDrive/rabota/2018_investments/2020_04_node.js/bond_search_v2 2>&1 | tee /home/mike/SynologyDrive/rabota/2018_investments/2020_04_node.js/bond_search_v2/log/log_$(date +%F_%T).txt
+GenericName=Поиск замены депозита в облигациях
+Icon=
+Keywords=Поиск замены депозита в облигациях
+MimeType=
+Name=Поиск замены депозита в облигациях
+NoDiplay=false
+Path=/home/mike/SynologyDrive/rabota/2018_investments/2020_04_node.js/bond_search_v2/
+StartupNotify=false
+Terminal=true
+TerminalOptions=
+Type=Application
+X-DBUS-ServiceName=
+X-DBUS-StartupType=
+X-KDE-SubstituteUID=false
+X-KDE-Username=
