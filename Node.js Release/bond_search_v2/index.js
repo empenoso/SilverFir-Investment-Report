@@ -4,16 +4,13 @@
  * 
  * Модуль поиска облигаций по параметрам [bond_search_v2/index.js]
  * 
- * Запуск под Linux: $ npm start
- * Запуск под Windows: start.bat
- * 
  * Описание: https://habr.com/ru/post/506720/ (2020 год)
  * Описание: https://habr.com/ru/post/533016/ (2021 год)
  * 
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 07.09.2021
+ * Last updated: 05.04.2022
  * 
  */
 
@@ -42,22 +39,23 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 10 //Доходность больше этой цифры
+    const YieldMore = 15 //Доходность больше этой цифры
     const YieldLess = 40 //Доходность меньше этой цифры
     const PriceMore = 60 //Цена больше этой цифры
     const PriceLess = 110 //Цена меньше этой цифры
     const DurationMore = 6 //Дюрация больше этой цифры
-    const DurationLess = 12 //Дюрация меньше этой цифры
-    const VolumeMore = 550 //Объем сделок в каждый из n дней, шт. больше этой цифры
-    const BondVolumeMore = 5000 // Совокупный объем сделок за n дней, шт. больше этой цифры
+    const DurationLess = 13 //Дюрация меньше этой цифры
+    const VolumeMore = 600 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const BondVolumeMore = 10000 // Совокупный объем сделок за n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
     // НЕТ - не важно, пусть в какие-то даты вместо выплаты прочерк
     const conditions = `<li>${YieldMore}% < Доходность < ${YieldLess}%</li>
                         <li>${PriceMore}% < Цена < ${PriceLess}%</li>
                         <li>${DurationMore} мес. < Дюрация < ${DurationLess} мес.</li> 
-                        <li>Значения всех купонов известны до самого погашения: ${OfferYesNo}.</li> 
+                        <li>Значения всех купонов известны до самого погашения: ${OfferYesNo}.</li>                         
                         <li>Объем сделок в каждый из 15 последних дней (c ${moment().subtract(15, 'days').format('DD.MM.YYYY')}) > ${VolumeMore} шт.</li>
+                        <li>Совокупный объем сделок за 15 дней больше ${BondVolumeMore} шт.</li> 
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
     var bonds = []
     var count
@@ -93,32 +91,32 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                     volume = await MOEXsearchVolume(SECID, VolumeMore)
                     let BondVolume = volume.value
                     log += volume.log
-                    if (BondVolume > BondVolumeMore) {
-                        if (volume.lowLiquid == 1) { // lowLiquid: 0 и 1 - переключатели. 
-                            // 0 - чтобы оборот был строго больше заданного
-                            // 1 - фильтр оборота не учитывается, в выборку попадают все бумаги, подходящие по остальным параметрам
-                            MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
-                            MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
-                            MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
-                            log += MonthsOfPayments.log
-                            if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
-                                bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                                console.log(`${getFunctionName()}. Для ${BondName} все даты будущих платежей с известным значением выплат.`)
-                                log += '<li>Для ' + BondName + ' все даты будущих платежей с известным значением выплат.</li>'
-                                console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
-                                log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
-                            }
-                            if (OfferYesNo == "НЕТ") {
-                                bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                                console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
-                                log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
-                            }
-                        } else {
-                            console.log(`${getFunctionName()}. Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
-                            log += `<li>Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
+                    console.log(`${getFunctionName()}. \\-> Совокупный объем сделок за n дней: ${BondVolume}, а условие ${BondVolumeMore} шт.`)
+                    if (volume.lowLiquid == 0 && BondVolume > BondVolumeMore) { // lowLiquid: 0 и 1 - переключатели. 
+                        //❗ 0 - чтобы оборот был строго больше заданного
+                        //❗ 1 - фильтр оборота не учитывается, в выборку попадают все бумаги, подходящие по остальным параметрам
+                        MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
+                        MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
+                        MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
+                        log += MonthsOfPayments.log
+                        if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
+                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                            console.log(`${getFunctionName()}. Для ${BondName} все даты будущих платежей с известным значением выплат.`)
+                            log += '<li>Для ' + BondName + ' все даты будущих платежей с известным значением выплат.</li>'
+                            console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                            log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
                         }
+                        if (OfferYesNo == "НЕТ") {
+                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                            console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                            log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                        }
+                    } else {
+                        console.log(`${getFunctionName()}. Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
+                        log += `<li>Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
                     }
                 }
+
             }
         } catch (e) {
             console.log(`Ошибка в ${getFunctionName()}: ${e}.`)
@@ -170,8 +168,8 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
             volume_sum += volume
             if (thresholdValue > volume) { // если оборот в конкретный день меньше 
                 lowLiquid = 1
-                console.log(`${getFunctionName()}. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.`)
-                log += `<li>Поиск оборота. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`
+                console.log(`${getFunctionName()}. На ${i+1}-й день (${json.history.data[i][1]}) из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.`)
+                log += `<li>Поиск оборота. На ${i+1}-й день (${json.history.data[i][1]}) из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.</li>`
             }
             if (count < 6) { // если всего дней в апи на этом периоде очень мало
                 lowLiquid = 1
