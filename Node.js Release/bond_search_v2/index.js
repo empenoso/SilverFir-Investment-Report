@@ -4,13 +4,13 @@
  * 
  * Модуль поиска облигаций по параметрам [bond_search_v2/index.js]
  * 
- * Описание: https://habr.com/ru/post/506720/ (2020 год)
  * Описание: https://habr.com/ru/post/533016/ (2021 год)
+ * Описание: https://habr.com/ru/post/506720/ (2020 год) 
  * 
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 20.08.2022
+ * Last updated: 09.02.2023
  * 
  */
 
@@ -40,12 +40,12 @@ module.exports.start = start;
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
     const YieldMore = 7 //Доходность больше этой цифры
-    const YieldLess = 40 //Доходность меньше этой цифры
+    const YieldLess = 15 //Доходность меньше этой цифры
     const PriceMore = 60 //Цена больше этой цифры
     const PriceLess = 110 //Цена меньше этой цифры
     const DurationMore = 6 //Дюрация больше этой цифры
     const DurationLess = 13 //Дюрация меньше этой цифры
-    const VolumeMore = 400 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const VolumeMore = 500 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const BondVolumeMore = 10000 // Совокупный объем сделок за n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
@@ -60,7 +60,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     var bonds = []
     var count
     var log = `<li>Поиск начат ${new Date().toLocaleString("ru-RU")}.</li>`
-    for (const t of [7, 58, 193]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
+    for (const t of [7, 58, 193, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
         const url = `https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/${t}/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION`
         console.log(`${getFunctionName()}. Ссылка поиска всех доступных облигаций группы: ${url}.`)
         log += `<li><b>Ссылка поиска всех доступных облигаций группы ${t}: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
