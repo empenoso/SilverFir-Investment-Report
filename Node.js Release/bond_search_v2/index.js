@@ -39,13 +39,13 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 7 //Доходность больше этой цифры
-    const YieldLess = 15 //Доходность меньше этой цифры
+    const YieldMore = 4 //Доходность больше этой цифры
+    const YieldLess = 13 //Доходность меньше этой цифры
     const PriceMore = 60 //Цена больше этой цифры
     const PriceLess = 110 //Цена меньше этой цифры
-    const DurationMore = 6 //Дюрация больше этой цифры
-    const DurationLess = 13 //Дюрация меньше этой цифры
-    const VolumeMore = 500 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const DurationMore = 0 //Дюрация больше этой цифры
+    const DurationLess = 5 //Дюрация меньше этой цифры
+    const VolumeMore = 900 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const BondVolumeMore = 10000 // Совокупный объем сделок за n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
