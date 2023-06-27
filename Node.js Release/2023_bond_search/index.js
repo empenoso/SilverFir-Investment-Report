@@ -39,14 +39,14 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 4 //Доходность больше этой цифры
+    const YieldMore = 8 //Доходность больше этой цифры
     const YieldLess = 13 //Доходность меньше этой цифры
     const PriceMore = 60 //Цена больше этой цифры
     const PriceLess = 110 //Цена меньше этой цифры
-    const DurationMore = 0 //Дюрация больше этой цифры
-    const DurationLess = 5 //Дюрация меньше этой цифры
-    const VolumeMore = 900 //Объем сделок в каждый из n дней, шт. больше этой цифры
-    const BondVolumeMore = 10000 // Совокупный объем сделок за n дней, шт. больше этой цифры
+    const DurationMore = 1 //Дюрация больше этой цифры
+    const DurationLess = 13 //Дюрация меньше этой цифры
+    const VolumeMore = 1400 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const BondVolumeMore = 9000 // Совокупный объем сделок за n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
     // НЕТ - не важно, пусть в какие-то даты вместо выплаты прочерк
@@ -60,7 +60,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     var bonds = []
     var count
     var log = `<li>Поиск начат ${new Date().toLocaleString("ru-RU")}.</li>`
-    for (const t of [7, 58, 193, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
+    for (const t of [58, 193, 105, 77, 207, 167, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
         const url = `https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/${t}/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION`
         console.log(`${getFunctionName()}. Ссылка поиска всех доступных облигаций группы: ${url}.`)
         log += `<li><b>Ссылка поиска всех доступных облигаций группы ${t}: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
