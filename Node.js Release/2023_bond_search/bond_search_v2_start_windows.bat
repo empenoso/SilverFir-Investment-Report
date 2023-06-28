@@ -7,6 +7,6 @@ call npm -v
 echo Wait, under Windows %COMPUTERNAME% there is no process display
 echo Check "log_%ldt%.txt" in "log" folder AFTER closing this window
 echo Process started at %ldt%
-pushd d:\bond_search_v2\
-cmd /q /k node index.js > d:\bond_search_v2\log\log_%ldt%.txt
-pause
+pushd %~dp0
+cmd /q /k node "%~dp0index.js" > "%~dp0log\log_%ldt%.txt"
+exit
