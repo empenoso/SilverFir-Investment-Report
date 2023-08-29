@@ -10,7 +10,7 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 09.02.2023
+ * Last updated: 29.08.2023
  * 
  */
 
@@ -40,13 +40,13 @@ module.exports.start = start;
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
     const YieldMore = 8 //Доходность больше этой цифры
-    const YieldLess = 13 //Доходность меньше этой цифры
+    const YieldLess = 15 //Доходность меньше этой цифры
     const PriceMore = 60 //Цена больше этой цифры
     const PriceLess = 110 //Цена меньше этой цифры
     const DurationMore = 1 //Дюрация больше этой цифры
-    const DurationLess = 13 //Дюрация меньше этой цифры
-    const VolumeMore = 1400 //Объем сделок в каждый из n дней, шт. больше этой цифры
-    const BondVolumeMore = 9000 // Совокупный объем сделок за n дней, шт. больше этой цифры
+    const DurationLess = 15 //Дюрация меньше этой цифры
+    const VolumeMore = 1500 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const BondVolumeMore = 15000 // Совокупный объем сделок за n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
     // НЕТ - не важно, пусть в какие-то даты вместо выплаты прочерк
@@ -87,7 +87,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                 if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
                     BondPrice > PriceMore && BondPrice < PriceLess &&
                     BondDuration > DurationMore && BondDuration < DurationLess) {
-                    console.log(`${getFunctionName()}. \\-> Условие доходности (${BondYield}%), цены (${BondPrice}%) и дюрации (${BondDuration} мес.) для ${BondName} прошло.`)
+                    console.log(`${getFunctionName()}.   \\-> Условие доходности (${YieldMore} < ${BondYield}% < ${YieldLess}), цены (${PriceMore} < ${BondPrice}% < ${PriceLess}) и дюрации (${DurationMore} < ${BondDuration} мес. < ${DurationLess}) для ${BondName} прошло.`)
                     volume = await MOEXsearchVolume(SECID, VolumeMore)
                     let BondVolume = volume.value
                     log += volume.log
