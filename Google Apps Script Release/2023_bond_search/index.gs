@@ -5,11 +5,11 @@
  *
  * @author Mikhail Shardin [Михаил Шардин] 
  * 
- * Last updated: 22.06.2023
+ * Last updated: 03.09.2023
  * 
  */
 
-function bond_search_v062023() {
+function bond_search_v102023() {
     eval(UrlFetchApp.fetch('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js').getContentText()); // использую https://momentjs.com/ для работы с датами
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -26,8 +26,7 @@ function bond_search_v062023() {
     const VolumeMore = parameters.getRange("c7").getValue() //Объем сделок в каждый из 15 последних дней, шт. больше этой цифры
     const BondVolumeMore = parameters.getRange("c8").getValue() // Совокупный объем сделок за n дней, шт. больше этой цифры
     const OfferYesNo = parameters.getRange("c6").getValue() //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
-    const conditions = `
-    Параметры поиска:
+    const conditions = `Параметры поиска:
     - ${YieldMore}% < Доходность < ${YieldLess}% 
     - ${PriceMore}% < Цена < ${PriceLess}% 
     - ${DurationMore} мес. < Дюрация < ${DurationLess} мес.  
@@ -41,7 +40,7 @@ function bond_search_v062023() {
     var count
     Logger.log(`Поиск начат ${new Date().toLocaleString("ru-RU")}.`)
 
-    for (const t of [7, 58, 193, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
+    for (const t of [58, 193, 105, 77, 207, 167, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
         const url = 'https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/' + t + '/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION'
         console.log('Ссылка поиска всех доступных облигаций группы: %s', url)
         try {
@@ -56,23 +55,38 @@ function bond_search_v062023() {
                 BondPrice = json.securities.data[i][2]
                 BondYield = json.marketdata.data[i][1]
                 BondDuration = Math.floor((json.marketdata.data[i][2] / 30) * 100) / 100 // кол-во оставшихся месяцев 
-                console.log(`Строка ${i + 1} из ${count}: ${BondName} (${SECID}): цена=${BondPrice}%, доходность=${BondYield}%.`)                
+                console.log(`Строка ${i + 1} из ${count}: ${BondName} (${SECID}): цена=${BondPrice}%, доходность=${BondYield}%.`)
                 if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
                     BondPrice > PriceMore && BondPrice < PriceLess &&
                     BondDuration > DurationMore && BondDuration < DurationLess) {
 
-                    console.log(` \\-> Условие доходности (${BondYield}%), цены (${BondPrice}%) и дюрации (${BondDuration} мес.) для ${BondName} прошло.`)
+                    console.log(`  \\-> Условие доходности (${YieldMore} < ${BondYield}% < ${YieldLess}), цены (${PriceMore} < ${BondPrice}% < ${PriceLess}) и дюрации (${DurationMore} < ${BondDuration} мес. < ${DurationLess}) для ${BondName} прошло.`)
                     volume = MOEXsearchVolume(SECID, VolumeMore)
                     BondVolume = volume.value
-                    if (volume.lowLiquid == 0) { // lowLiquid: 0 и 1 - переключатели. 1 - если за какой-то из дней оборот был меньше заданного
+
+                    if (volume.lowLiquid == 0 && BondVolume > BondVolumeMore) { // lowLiquid: 0 и 1 - переключатели
+                        //❗ 0 - чтобы оборот был строго больше заданного
+                        //❗ 1 - фильтр оборота не учитывается, в выборку попадают все бумаги, подходящие по остальным параметрам
                         MonthsOfPayments = MOEXsearchMonthsOfPayments(SECID)
-                        bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPayments])
-                        console.log('Cтрока № %s: %s.', bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+
+                        MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
+                        MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
+                        if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
+                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                            console.log(`Для ${BondName} все даты будущих платежей с известным значением выплат.`)
+                            console.log('Результат № %s: %s.', bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                        }
+                        if (OfferYesNo == "НЕТ") {
+                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                            console.log('Результат № %s: %s.', bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                        }
+                    } else {
+                        console.log(`Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
                     }
                 }
             }
         } catch (e) {
-            console.log(`Ошибка в bond_search_v3: ${e}.`)
+            console.log(`Ошибка в bond_search_v062023: ${e}.`)
         }
     }
     bonds.sort(function (x, y) { // сортировка по столбцу Объем сделок за n дней, шт.
@@ -82,11 +96,11 @@ function bond_search_v062023() {
     });
     bonds.unshift(["Полное наименование", "Код ценной бумаги", "Цена, %", `Объем сделок\nс ${moment().subtract(15, 'days').format('DD.MM.YYYY')}, шт.`, "Доходность", "Дюрация, месяцев", "Месяцы выплат"]);
     result.getRange("A1:G" + bonds.length).setValues(bonds);
-    result.getRange("a:g").setHorizontalAlignment("center").setVerticalAlignment("middle");    
+    result.getRange("a:g").setHorizontalAlignment("center").setVerticalAlignment("middle");
     result.getRange("D:D").setNumberFormat("#,##0");
     result.getRange("A1:G1").setFontWeight("bold");
     result.autoResizeColumns(1, 7);
-    result.getRange(result.getLastRow() + 2, 1).setValue("Данные обновлены:\n" + Utilities.formatDate(new Date(), "GMT+5", "dd.MM.yyyy в HH:mm:ss") + ".");
+    result.getRange(result.getLastRow() + 2, 1).setHorizontalAlignment("left").setValue(conditions + "\n\nДанные найдены: " + Utilities.formatDate(new Date(), "GMT+5", "dd.MM.yyyy в HH:mm:ss") + ".");
 }
 
 function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок в каждый из n дней больше определенного порога
@@ -114,6 +128,10 @@ function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок в к
                 var lowLiquid = 1
                 console.log(`MOEXsearchVolume. На ${i+1}-й день из ${count} оборот по бумаге ${ID} меньше чем ${thresholdValue}: ${volume} шт.`)
             }
+            if (count < 6) { // если всего дней в апи на этом периоде очень мало
+                lowLiquid = 1
+                console.log(`MOEXsearchVolume. Всего в АПИ Мосбиржи доступно ${count} дней, а надо хотя бы больше 6 торговых дней с ${DateRequestPrevious}!`)
+            }
         }
         if (lowLiquid != 1) {
             console.log(`MOEXsearchVolume. Во всех ${count} днях оборот по бумаге ${ID} был больше, чем ${thresholdValue} шт каждый день.`)
@@ -135,21 +153,29 @@ function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, когд�
         const response = UrlFetchApp.fetch(url).getContentText();
         const json = JSON.parse(response);
         var couponDates = []
+        var value_rubNull = 0
         for (var i = 0; i <= json.coupons.data.length - 1; i++) {
-            coupondate = json.coupons.data[i][3]
+            coupondate = json.coupons.data[i][3] // даты купона
+            value_rub = json.coupons.data[i][9] // сумма выплаты купона
             inFuture = new Date(coupondate) > new Date()
             if (inFuture == true) {
                 couponDates.push(+coupondate
                     .split("-")[1]
                 )
                 // console.log(`MOEXsearchMonthsOfPayments. Купон для ${ID} выплачивается в месяц ${JSON.stringify(couponDates[couponDates.length - 1])} (строка ${couponDates.length}).`)
+                if (value_rub == null) {
+                    value_rubNull += 1
+                }
             }
+        }
+        if (value_rubNull > 0) {
+            console.log(`MOEXsearchMonthsOfPayments. Для ${ID} есть ${value_rubNull} дат(ы) будущих платежей с неизвестным значением выплат.`)
         }
         let uniqueDates = [...new Set(couponDates)] // уникальные значения месяцев
         uniqueDates = uniqueDates.sort(function (a, b) {
             return a - b;
         })
-        console.log(`MOEXsearchMonthsOfPayments. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.`)        
+        console.log(`MOEXsearchMonthsOfPayments. Купоны для ${ID} выплачиваются в ${uniqueDates} месяцы.`)
         let formattedDates = ''
         for (let y = 1; y < 13; y++) {
             formattedDates += uniqueDates.includes(y) ? `${y}` : `–––`
@@ -168,8 +194,11 @@ function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, когд�
             .replace(/10-/g, 'окт-')
             .replace(/11-/g, 'ноя-')
             .replace(/12/g, '-дек')
-        console.log(`MOEXsearchMonthsOfPayments. Сформатированная строка вывода в которой есть месяцы выплат: ${formattedDates}.`)
-        return formattedDates
+        // console.log(`MOEXsearchMonthsOfPayments. Сформатированная строка вывода в которой есть месяцы выплат: ${formattedDates}.`)
+        return {
+            formattedDates: formattedDates,
+            value_rubNull: value_rubNull
+        }
     } catch (e) {
         console.log('Ошибка в MOEXsearchMonthsOfPayments:' + e)
     }

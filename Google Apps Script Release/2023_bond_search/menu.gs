@@ -5,14 +5,14 @@
  *
  * @author Mikhail Shardin [Михаил Шардин] 
  * 
- * Last updated: 03.07.2023
+ * Last updated: 03.09.2023
  * 
  */
 
 function onOpen() {
     SpreadsheetApp.getUi()
-        .createMenu('Поиск облигаций v. 062023')
-        .addItem('Искать по параметрам', 'bond_search_v062023')
+        .createMenu('Поиск облигаций v. 102023')
+        .addItem('Искать по параметрам', 'bond_search_v102023')
         .addSeparator()
         .addItem('Открыть описание работы таблицы', 'showAnchor')
         .addToUi();
