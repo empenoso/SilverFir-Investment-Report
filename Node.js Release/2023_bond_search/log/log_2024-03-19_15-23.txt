@@ -1,0 +1,289 @@
+Функция start начала работу в 19.03.2024, 15:23:25. 
+
+MOEXsearchBonds. Ссылка поиска всех доступных облигаций группы: https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/58/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION.
+Ошибка в MOEXsearchBonds: FetchError: request to https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/58/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION failed, reason: read ECONNRESET.
+MOEXsearchBonds. Ссылка поиска всех доступных облигаций группы: https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/193/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION.
+MOEXsearchBonds. Всего в списке: 146 бумаг.
+MOEXsearchBonds. Строка 1 из 146: ВЭБ-лизинг USD-001P-01 (RU000A0JVNL1): цена=99.85%, доходность=2.88%, дюрация=0 мес.
+MOEXsearchBonds. Строка 2 из 146: ГОВОЗ РФ 12840077V (RU) (RU000A0JWHA4): цена=101.545%, доходность=4.09%, дюрация=0 мес.
+MOEXsearchBonds. Строка 3 из 146: РОСЭКСИМБАНК АО БО-001P-01 (RU000A0JX2M2): цена=101.23%, доходность=5.3%, дюрация=8.66 мес.
+MOEXsearchBonds. Строка 4 из 146: ГОВОЗ РФ 12840078V (RU) (RU000A0JXTS9): цена=99.75%, доходность=4.31%, дюрация=0 мес.
+MOEXsearchBonds. Строка 5 из 146: ГОВОЗ РФ 12840079V (RU) (RU000A0JXU14): цена=89.54%, доходность=5.93%, дюрация=0 мес.
+MOEXsearchBonds. Строка 6 из 146: ГосТранспортЛизингКомп 001P-05 (RU000A0JY023): цена=99.7999%, доходность=16.87%, дюрация=3.73 мес.
+MOEXsearchBonds.   \-> Условие доходности (10 < 16.87% < 25), цены (60 < 99.7999% < 110) и дюрации (0 < 3.73 мес. < 12) для ГосТранспортЛизингКомп 001P-05 прошло.
+MOEXsearchVolume. Ссылка для поиска объёма сделок RU000A0JY023: https://iss.moex.com/iss/history/engines/stock/markets/bonds/boards/TQOD/securities/RU000A0JY023.json?iss.meta=off&iss.only=history&history.columns=SECID,TRADEDATE,VOLUME,NUMTRADES&limit=20&from=2024-03-04
+MOEXsearchVolume. На 1-й день (2024-03-04) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 2-й день (2024-03-05) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 3-й день (2024-03-06) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 4-й день (2024-03-07) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 5-й день (2024-03-11) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 6-й день (2024-03-12) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 7-й день (2024-03-13) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 8-й день (2024-03-14) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 9-й день (2024-03-15) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. На 10-й день (2024-03-18) из 10 оборот по бумаге RU000A0JY023 меньше чем 1000: 0 шт.
+MOEXsearchVolume. Итоговый оборот в бумагах (объем сделок, шт) за 10 дней: 0 шт нарастающим итогом.
+MOEXsearchBonds. \-> Совокупный объем сделок за n дней: 0, а условие 29000 шт.
+MOEXsearchBonds. Облигация ГосТранспортЛизингКомп 001P-05, RU000A0JY023 в выборку не попадает из-за малых оборотов или доступно мало торговых дней.
+MOEXsearchBonds. Строка 7 из 146: Совкомбанк ПАО обл. 2В03 (RU000A0ZYWZ2): цена=101.25%, доходность=8.15%, дюрация=50.3 мес.
+MOEXsearchBonds. Строка 8 из 146: Совкомбанк ПАО обл. 1В02 (RU000A0ZYX28): цена=91.7103%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 9 из 146: ГОВОЗ РФ 12840080V (RU) (RU000A0ZYYN4): цена=97.25%, доходность=4.99%, дюрация=0 мес.
+MOEXsearchBonds. Строка 10 из 146: ГТЛК БО 001P-11 (RU000A0ZZAL5): цена=98.3%, доходность=7.66%, дюрация=0 мес.
+MOEXsearchBonds. Строка 11 из 146: Россельхозбанк АО 11В1 (RU000A0ZZY59): цена=101.9992%, доходность=8.85%, дюрация=46.9 мес.
+MOEXsearchBonds. Строка 12 из 146: ГОВОЗ РФ 12840086V (RU) (RU000A1006S9): цена=97%, доходность=5.46%, дюрация=0 мес.
+MOEXsearchBonds. Строка 13 из 146: Банк ГПБ ГПБ-Т2-03Д (RU000A101ER8): цена=86%, доходность=14.36%, дюрация=0 мес.
+MOEXsearchBonds. Строка 14 из 146: ВЭБ.РФ ПБО-001Р-23В (RU000A102K96): цена=97%, доходность=4.82%, дюрация=20.63 мес.
+MOEXsearchBonds. Строка 15 из 146: Экспобанк 02ВК (RU000A1037P0): цена=100%, доходность=7.63%, дюрация=0 мес.
+MOEXsearchBonds. Строка 16 из 146: ВЭБ.РФ ПБО-001Р-30В (RU000A103FY7): цена=96.4%, доходность=5.09%, дюрация=27.5 мес.
+MOEXsearchBonds. Строка 17 из 146: АО Россельхозбанк БО-01RS-Р (RU000A103GT5): цена=99.995%, доходность=1.44%, дюрация=0 мес.
+MOEXsearchBonds. Строка 18 из 146: Металлинвестбанк С-01 (RU000A103JK8): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 19 из 146: Банк ГПБ ГПБ-Т2-04Д (RU000A103K38): цена=99%, доходность=4.9%, дюрация=0 мес.
+MOEXsearchBonds. Строка 20 из 146: СИБУР Холдинг БО-06 (RU000A103T47): цена=97.19%, доходность=0%, дюрация=6.56 мес.
+MOEXsearchBonds. Строка 21 из 146: СИБУР Холдинг БО-14 (RU000A103T54): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 22 из 146: СИБУР Холдинг БО-07 (RU000A103T62): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 23 из 146: СИБУР Холдинг БО-08 (RU000A103T70): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 24 из 146: СИБУР Холдинг БО-13 (RU000A103T88): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 25 из 146: СИБУР Холдинг БО-09 (RU000A103T96): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 26 из 146: СИБУР Холдинг БО-10 (RU000A103TA8): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 27 из 146: СИБУР Холдинг БО-12 (RU000A103TB6): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 28 из 146: СИБУР Холдинг БО-11 (RU000A103TC4): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 29 из 146: Цифра брокер П01-02 (RU000A1040E8): цена=96.0102%, доходность=7.37%, дюрация=29.8 мес.
+MOEXsearchBonds. Строка 30 из 146: ПИК-Корпорация 001Р-05 (RU000A105146): цена=96.8015%, доходность=6.68%, дюрация=30 мес.
+MOEXsearchBonds. Строка 31 из 146: Газпром капитал ООО ЗО27-1-Д (RU000A1056U0): цена=98.27%, доходность=5.44%, дюрация=33.6 мес.
+MOEXsearchBonds. Строка 32 из 146: ЕАБР 003P-003 (RU000A1057B8): цена=94.5%, доходность=5.11%, дюрация=29.13 мес.
+MOEXsearchBonds. Строка 33 из 146: Газпром капитал ООО ЗО24-1-Ф (RU000A1059A6): цена=99.0211%, доходность=17.29%, дюрация=0.56 мес.
+MOEXsearchBonds.   \-> Условие доходности (10 < 17.29% < 25), цены (60 < 99.0211% < 110) и дюрации (0 < 0.56 мес. < 12) для Газпром капитал ООО ЗО24-1-Ф прошло.
+MOEXsearchVolume. Ссылка для поиска объёма сделок RU000A1059A6: https://iss.moex.com/iss/history/engines/stock/markets/bonds/boards/TQCB/securities/RU000A1059A6.json?iss.meta=off&iss.only=history&history.columns=SECID,TRADEDATE,VOLUME,NUMTRADES&limit=20&from=2024-03-04
+MOEXsearchVolume. На 1-й день (2024-03-04) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 15 шт.
+MOEXsearchVolume. На 2-й день (2024-03-05) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 154 шт.
+MOEXsearchVolume. На 3-й день (2024-03-06) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 281 шт.
+MOEXsearchVolume. На 4-й день (2024-03-07) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 67 шт.
+MOEXsearchVolume. На 5-й день (2024-03-11) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 99 шт.
+MOEXsearchVolume. На 6-й день (2024-03-12) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 101 шт.
+MOEXsearchVolume. На 7-й день (2024-03-13) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 175 шт.
+MOEXsearchVolume. На 8-й день (2024-03-14) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 733 шт.
+MOEXsearchVolume. На 9-й день (2024-03-15) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 161 шт.
+MOEXsearchVolume. На 10-й день (2024-03-18) из 10 оборот по бумаге RU000A1059A6 меньше чем 1000: 399 шт.
+MOEXsearchVolume. Итоговый оборот в бумагах (объем сделок, шт) за 10 дней: 2185 шт нарастающим итогом.
+MOEXsearchBonds. \-> Совокупный объем сделок за n дней: 2185, а условие 29000 шт.
+MOEXsearchBonds. Облигация Газпром капитал ООО ЗО24-1-Ф, RU000A1059A6 в выборку не попадает из-за малых оборотов или доступно мало торговых дней.
+MOEXsearchBonds. Строка 34 из 146: Газпром капитал ООО ЗО34-1-Д (RU000A105A95): цена=114.2591%, доходность=6.72%, дюрация=84.83 мес.
+MOEXsearchBonds. Строка 35 из 146: Газпром капитал ООО ЗО28-1-Е (RU000A105BY1): цена=82.1%, доходность=6.64%, дюрация=54.3 мес.
+MOEXsearchBonds. Строка 36 из 146: Газпром капитал ООО ЗО24-1-Е (RU000A105C51): цена=96.9999%, доходность=7.72%, дюрация=8.23 мес.
+MOEXsearchBonds. Строка 37 из 146: Rolls-Royce PLC 5.75 15/10/27 (USG76237AC37): цена=92%, доходность=8.55%, дюрация=0 мес.
+MOEXsearchBonds. Строка 38 из 146: ГОВОЗ РФ МК-0-СМ-119 (XS) (XS0088543193): цена=130.5%, доходность=4.84%, дюрация=0 мес.
+MOEXsearchBonds. Строка 39 из 146: ГОВОЗ РФ SK-0-CM-128 (XS) (XS0114288789): цена=104.2%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 40 из 146: VEB FINANCE LIMITED 6.8 22/11/ (XS0559915961): цена=100%, доходность=7.64%, дюрация=19.2 мес.
+MOEXsearchBonds. Строка 41 из 146: ГОВОЗ РФ 12840061V (XS) (XS0767473852): цена=95.8%, доходность=6.01%, дюрация=0 мес.
+MOEXsearchBonds. Строка 42 из 146: VTB Eurasia DAC 9.5 (XS0810596832): цена=50%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 43 из 146: ГОВОЗ РФ 12840069V (XS) (XS0971721963): цена=93.5%, доходность=6.47%, дюрация=0 мес.
+MOEXsearchBonds. Строка 44 из 146: Steel Funding D.A.C. 21.09.24 (XS1577953174): цена=105%, доходность=-5.46%, дюрация=0 мес.
+MOEXsearchBonds. Строка 45 из 146: CBOM Finance P.L.C. 7.5 (XS1589106910): цена=69.9999%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 46 из 146: BCS SP Plc Series 9 (XS1590566193): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 47 из 146: CBOM Finance PLC 8.875 UNDT (XS1601094755): цена=100.9998%, доходность=1.72%, дюрация=0 мес.
+MOEXsearchBonds. Строка 48 из 146: Republic of Belarus 29/6/27 (XS1634369224): цена=75.9098%, доходность=18.07%, дюрация=0 мес.
+MOEXsearchBonds. Строка 49 из 146: BCS SP Plc Series 2017-12 (XS1708325748): цена=122.5%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 50 из 146: BCS SP Plc Series 2017-17 (XS1718466250): цена=116.7593%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 51 из 146: Alfa Bond Issuance perpetual 2 (XS1760786340): цена=81.0475%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 52 из 146: Republic of Belarus 28/02/30 (XS1760804184): цена=72.5%, доходность=13.19%, дюрация=0 мес.
+MOEXsearchBonds. Строка 53 из 146: BCS SP Plc Series 14 (XS1762858428): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 54 из 146: BCS SP Plc Series 2018-1 (XS1764143597): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 55 из 146: BCS SP Plc Series 2018-6 (XS1801889830): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 56 из 146: ALROSA FIN SA 4.65 09/04/24 (XS1843441731): цена=105%, доходность=-55.85%, дюрация=0 мес.
+MOEXsearchBonds. Строка 57 из 146: BCS SP Plc Series 2019-2 (XS1946763361): цена=80%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 58 из 146: BCS SP Plc Series 38 (XS1962541709): цена=94%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 59 из 146: BCS SP Plc Series 41 (XS1982161603): цена=95%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 60 из 146: BCS SP Plc Series 45 (XS2009879425): цена=90%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 61 из 146: ALROSA Finance S.A. 25/06/27 (XS2010030919): цена=72.18%, доходность=14.27%, дюрация=0 мес.
+MOEXsearchBonds. Строка 62 из 146: Uralkali Finance 22/10/24 (XS2010040397): цена=103.51%, доходность=-5.91%, дюрация=0 мес.
+MOEXsearchBonds. Строка 63 из 146: Sibur Securities DAC 23/09/24 (XS2010044621): цена=97.1884%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 64 из 146: BCS SP Plc Series 2019-6 (XS2019822357): цена=90%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 65 из 146: BCS SP Plc Series 2019-8 (XS2027360507): цена=76.9999%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 66 из 146: BCS SP Plc Series 48 (XS2028879026): цена=80%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 67 из 146: BCS SP Plc Series 2019-11 (XS2045765729): цена=90%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 68 из 146: STEEL CAPITAL S.A. 16/09/24 (XS2046736919): цена=95.9953%, доходность=11.87%, дюрация=0 мес.
+MOEXsearchBonds. Строка 69 из 146: BCS SP Plc Series 58 (XS2057952439): цена=77%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 70 из 146: Alfa Bond Issuance 15/04/30 (XS2063279959): цена=90.15%, доходность=16.49%, дюрация=12.46 мес.
+MOEXsearchBonds. Строка 71 из 146: BCS SP Plc Series 2019-15 (XS2065019957): цена=89%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 72 из 146: BCS SP Plc Series 61 (XS2068071211): цена=99.92%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 73 из 146: MMC Finance DAC 28/10/24 (XS2069992258): цена=98.7%, доходность=5.56%, дюрация=7.3 мес.
+MOEXsearchBonds. Строка 74 из 146: BCS SP Plc Series 62 (XS2072913317): цена=99%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 75 из 146: BCS SP Plc Series 64 (XS2072913663): цена=87%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 76 из 146: BCS SP Plc Series 69 (XS2085844053): цена=80%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 77 из 146: BCS SP Plc Series 70 (XS2085844640): цена=100%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 78 из 146: BCS SP Plc Series 72 (XS2091664370): цена=80%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 79 из 146: BCS SP Plc Series 74 (XS2091668447): цена=75%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 80 из 146: CBOM Finance P.L.C. 4.7 (XS2099763075): цена=87.9%, доходность=21.4%, дюрация=0 мес.
+MOEXsearchBonds. Строка 81 из 146: BCS SP Plc Series 80 (XS2104929331): цена=115.83%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 82 из 146: BCS SP Plc Series 2020-01 (XS2110115487): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 83 из 146: BCS SP Plc Series 2020-02 (XS2116689972): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 84 из 146: Republic of Belarus 24/02/31 (XS2120882183): цена=74.4%, доходность=12.06%, дюрация=0 мес.
+MOEXsearchBonds. Строка 85 из 146: BCS SP Plc Series 2020-3 (XS2121431113): цена=75.01%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 86 из 146: BCS SP Plc Series 2020-7 (XS2139466846): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 87 из 146: BCS SP Plc Series 2020-6 (XS2139467901): цена=84%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 88 из 146: BCS SP Plc Series 88 (XS2143253651): цена=80%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 89 из 146: BCS SP Plc Series 2020-13 (XS2154338623): цена=111.3%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 90 из 146: BCS SP Plc Series 2020-15 (XS2189377562): цена=96%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 91 из 146: BCS SP Plc Series 98 (XS2191043913): цена=83%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 92 из 146: Sibur Securities DAC 08/07/25 (XS2199713384): цена=91%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 93 из 146: BCS SP Plc Series 2020-19 (XS2205545119): цена=98%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 94 из 146: BCS SP Plc Series 104 (XS2208853999): цена=96%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 95 из 146: BCS SP Plc Series 107 (XS2211859439): цена=74.03%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 96 из 146: BCS SP Plc Series 118 (XS2237422972): цена=73%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 97 из 146: BCS SP Plc Series 123 (XS2248577566): цена=92%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 98 из 146: BCS SP Plc Series 2020-31 (XS2252533075): цена=105%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 99 из 146: BCS SP Plc Series 2020-32 (XS2260424580): цена=105.7%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 100 из 146: BCS SP Plc Series 129 (XS2267887946): цена=84.9998%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 101 из 146: BCS SP Plc Series 131 (XS2267888597): цена=70.0798%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 102 из 146: BCS SP Plc Series 2020-35 (XS2269280066): цена=107.2%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 103 из 146: BCS SP Plc Series 137 (XS2276567604): цена=53%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 104 из 146: DME Airport DAC 08/02/28 (XS2278534099): цена=100%, доходность=5.33%, дюрация=0 мес.
+MOEXsearchBonds. Строка 105 из 146: BCS SP Plc Series 138 (XS2290820518): цена=53.9999%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 106 из 146: BCS SP Plc Series 143 (XS2298598462): цена=32.4%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 107 из 146: BCS SP Plc Series 144 (XS2301236753): цена=40%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 108 из 146: BCS SP Plc Series 147 (XS2306607271): цена=40.5093%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 109 из 146: BCS SP Plc Series 149 (XS2307308069): цена=60.0001%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 110 из 146: BCS SP Plc Series 150 (XS2307564653): цена=70%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 111 из 146: BCS SP Plc Series 155 (XS2321534310): цена=102%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 112 из 146: BCS SP Plc Series 159 (XS2325565369): цена=81%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 113 из 146: BCS SP Plc Series 158 (XS2325702459): цена=39%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 114 из 146: BCS SP Plc Series 160 (XS2328381756): цена=104.02%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 115 из 146: BCS SP Plc Series 161 (XS2328978999): цена=76%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 116 из 146: BCS SP Plc Series 165 (XS2332228449): цена=55.03%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 117 из 146: BCS SP Plc Series 172 (XS2337341528): цена=60.0002%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 118 из 146: BCS SP Plc Series 178 (XS2348717658): цена=48.0011%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 119 из 146: BCS SP Plc Series 179 (XS2348718383): цена=70%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 120 из 146: BCS SP Plc Series 182 (XS2353064335): цена=59%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 121 из 146: BCS SP Plc Series 187 (XS2357422331): цена=61%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 122 из 146: BCS SP Plc Series 193 (XS2360292556): цена=46.047%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 123 из 146: BCS SP Plc Series 196 (XS2362683570): цена=69.79%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 124 из 146: BCS SP Plc Series 195 (XS2363070850): цена=80%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 125 из 146: BCS SP Plc Series 198 (XS2369557371): цена=80.3802%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 126 из 146: BCS SP Plc Series 197 (XS2369574384): цена=58.77%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 127 из 146: BCS SP Plc Series 200 (XS2369925511): цена=66.3099%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 128 из 146: BCS SP Plc Series 199 (XS2371857223): цена=100%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 129 из 146: BCS SP Plc Series 205 (XS2377117697): цена=88%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 130 из 146: SUEK Securities DAC 15/09/26 (XS2384174228): цена=97%, доходность=4.65%, дюрация=0 мес.
+MOEXsearchBonds. Строка 131 из 146: CBOM Finance P.L.C. 3.875 21/0 (XS2384475930): цена=67.2667%, доходность=22.42%, дюрация=0 мес.
+MOEXsearchBonds. Строка 132 из 146: BCS SP Plc Series 213 (XS2386140078): цена=64.4399%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 133 из 146: BCS SP Plc Series 212 (XS2386146273): цена=53.0191%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 134 из 146: BCS SP Plc Series 216 (XS2388941580): цена=70%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 135 из 146: CBOM Finance P.L.C. 7.625 UNDT (XS2392969395): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 136 из 146: BCS SP Plc Series 218 (XS2394824499): цена=71.8802%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 137 из 146: BCS SP Plc Series 219 (XS2401439927): цена=80%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 138 из 146: BCS SP Plc Series 225 (XS2407287452): цена=99%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 139 из 146: BCS SP Plc Series 226 (XS2410061076): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 140 из 146: BCS SP Plc Series 231 (XS2413860409): цена=76.99%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 141 из 146: BCS SP Plc Series 232 (XS2416961386): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 142 из 146: BCS SP Plc Series 238 (XS2418791864): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 143 из 146: BCS SP Plc Series 240 (XS2423361190): цена=100%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 144 из 146: BCS SP Plc Series 243 (XS2429208486): цена=92.7%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 145 из 146: BCS SP Plc Series 244 (XS2439218640): цена=98.49%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 146 из 146: Raiffeisen Bank Int AG (AT0000A2UF10): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Ссылка поиска всех доступных облигаций группы: https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/105/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION.
+MOEXsearchBonds. Всего в списке: 31 бумаг.
+MOEXsearchBonds. Строка 1 из 31: ОФЗ-ПД 26207 03/02/27 (SU26207RMFS9): цена=null%, доходность=11.35%, дюрация=0 мес.
+MOEXsearchBonds. Строка 2 из 31: ОФЗ-ПД 26212 19/01/28 (SU26212RMFS9): цена=null%, доходность=5.92%, дюрация=0 мес.
+MOEXsearchBonds. Строка 3 из 31: ОФЗ-ПД 26218 17/09/31 (SU26218RMFS6): цена=null%, доходность=6.59%, дюрация=0 мес.
+MOEXsearchBonds. Строка 4 из 31: ОФЗ-ПД 26219 16/09/26 (SU26219RMFS4): цена=null%, доходность=7.69%, дюрация=0 мес.
+MOEXsearchBonds. Строка 5 из 31: ОФЗ-ПД 26221 23/03/33 (SU26221RMFS0): цена=null%, доходность=10.23%, дюрация=0 мес.
+MOEXsearchBonds. Строка 6 из 31: ОФЗ-ПД 26222 16/10/24 (SU26222RMFS8): цена=null%, доходность=34.1%, дюрация=0 мес.
+MOEXsearchBonds. Строка 7 из 31: ОФЗ-ПД 26224 23/05/29 (SU26224RMFS4): цена=null%, доходность=6.95%, дюрация=0 мес.
+MOEXsearchBonds. Строка 8 из 31: ОФЗ-ПД 26225 10/05/34 (SU26225RMFS1): цена=null%, доходность=7.21%, дюрация=0 мес.
+MOEXsearchBonds. Строка 9 из 31: ОФЗ-ПД 26226 07/10/26 (SU26226RMFS9): цена=null%, доходность=2.61%, дюрация=0 мес.
+MOEXsearchBonds. Строка 10 из 31: ОФЗ-ПД 26227 17/07/24 (SU26227RMFS7): цена=null%, доходность=22.28%, дюрация=0 мес.
+MOEXsearchBonds. Строка 11 из 31: ОФЗ-ПД 26228 10/04/30 (SU26228RMFS5): цена=null%, доходность=10.66%, дюрация=0 мес.
+MOEXsearchBonds. Строка 12 из 31: ОФЗ-ПД 26229 12/11/25 (SU26229RMFS3): цена=null%, доходность=13.17%, дюрация=0 мес.
+MOEXsearchBonds. Строка 13 из 31: ОФЗ-ПД 26232 06/10/27 (SU26232RMFS7): цена=null%, доходность=5.57%, дюрация=0 мес.
+MOEXsearchBonds. Строка 14 из 31: ОФЗ-ПД 26233 18/07/2035 (SU26233RMFS5): цена=null%, доходность=15.39%, дюрация=0 мес.
+MOEXsearchBonds. Строка 15 из 31: ОФЗ-ПД 26234 16/07/2025 (SU26234RMFS3): цена=null%, доходность=17.94%, дюрация=0 мес.
+MOEXsearchBonds. Строка 16 из 31: ОФЗ-ПД 26235 12/03/2031 (SU26235RMFS0): цена=null%, доходность=15.8%, дюрация=0 мес.
+MOEXsearchBonds. Строка 17 из 31: ОФЗ-ПД 26236 17/05/2028 (SU26236RMFS8): цена=null%, доходность=9.98%, дюрация=0 мес.
+MOEXsearchBonds. Строка 18 из 31: ОФЗ-ПД 26237 14/03/2029 (SU26237RMFS6): цена=null%, доходность=16.39%, дюрация=0 мес.
+MOEXsearchBonds. Строка 19 из 31: ОФЗ-ПД 26239 23/07/2031 (SU26239RMFS2): цена=null%, доходность=10.53%, дюрация=0 мес.
+MOEXsearchBonds. Строка 20 из 31: ОФЗ-ПД 26240 30/07/2036 (SU26240RMFS0): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 21 из 31: ОФЗ-ПД 26241 17/11/32 (SU26241RMFS8): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 22 из 31: ОФЗ-ПД 26242 29/08/29 (SU26242RMFS6): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 23 из 31: ОФЗ-ПД 26243 19/05/38 (SU26243RMFS4): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 24 из 31: ОФЗ-ПД 26244 15/03/34 (SU26244RMFS2): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 25 из 31: ОФЗ-ПК 29021 27/11/30 (SU29021RMFS1): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 26 из 31: ОФЗ-ПК 29022 20/07/33 (SU29022RMFS9): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 27 из 31: ОФЗ-ПК 29023 23/08/34 (SU29023RMFS7): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 28 из 31: ОФЗ-ПК 29024 18/04/35 (SU29024RMFS5): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 29 из 31: ОФЗ-ПК 29025 12/08/37 (SU29025RMFS2): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 30 из 31: ОФЗ-ИН 52005 11/05/33 (SU52005RMFS4): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 31 из 31: ГОВОЗ РФ SK-0-CM-128 (XS) (XS0114288789): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Ссылка поиска всех доступных облигаций группы: https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/77/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION.
+MOEXsearchBonds. Всего в списке: 0 бумаг.
+MOEXsearchBonds. Ссылка поиска всех доступных облигаций группы: https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/207/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION.
+MOEXsearchBonds. Всего в списке: 18 бумаг.
+MOEXsearchBonds. Строка 1 из 18: ГОВОЗ РФ 12978082V (RU) (RU000A0ZZVE6): цена=98.1%, доходность=4.04%, дюрация=0 мес.
+MOEXsearchBonds. Строка 2 из 18: Россельхозбанк С01Е-01 (RU000A101616): цена=72.1%, доходность=14.77%, дюрация=0 мес.
+MOEXsearchBonds. Строка 3 из 18: Банк ГПБ ГПБ-Т2-02Е (RU000A101EQ0): цена=64%, доходность=3.54%, дюрация=0 мес.
+MOEXsearchBonds. Строка 4 из 18: ГОВОЗ РФ 12978087V (RU) (RU000A102CK5): цена=86%, доходность=5.43%, дюрация=0 мес.
+MOEXsearchBonds. Строка 5 из 18: ГОВОЗ РФ 12978088V (RU) (RU000A102CL3): цена=72.475%, доходность=6.1%, дюрация=0 мес.
+MOEXsearchBonds. Строка 6 из 18: ГОВОЗ РФ 12978104V (RU) (RU000A1034K8): цена=69.755%, доходность=5.91%, дюрация=0 мес.
+MOEXsearchBonds. Строка 7 из 18: RZD Capital PLC 2.2 23/05/27 (XS1843437036): цена=75.1%, доходность=11.92%, дюрация=0 мес.
+MOEXsearchBonds. Строка 8 из 18: BCS SP Plc Series 2019-3 (XS1952156344): цена=96%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 9 из 18: BCS SP Plc Series 2019-7 (XS1960651641): цена=97.63%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 10 из 18: BCS SP Plc Series 40 (XS1967593796): цена=98%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 11 из 18: BCS SP Plc Series 54 (XS2038610445): цена=90%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 12 из 18: BCS SP Plc Series 77 (XS2093710494): цена=98%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 13 из 18: BCS SP Plc Series 2020-20 (XS2205319705): цена=91%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 14 из 18: BCS SP Plc Series 112 (XS2225301725): цена=99%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 15 из 18: CBOM Finance P.L.C. 3.1 (XS2281299763): цена=73%, доходность=22.56%, дюрация=0 мес.
+MOEXsearchBonds. Строка 16 из 18: BCS SP Plc Series 177 (XS2345852821): цена=62.9%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 17 из 18: BCS SP Plc Series 224 (XS2406000138): цена=97.95%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 18 из 18: BCS SP Plc Series 245 (XS2446844321): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Ссылка поиска всех доступных облигаций группы: https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/167/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION.
+MOEXsearchBonds. Всего в списке: 0 бумаг.
+MOEXsearchBonds. Ссылка поиска всех доступных облигаций группы: https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/245/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION.
+MOEXsearchBonds. Всего в списке: 29 бумаг.
+MOEXsearchBonds. Строка 1 из 29: МФК Быстроденьги Ю002Р-01 (RU000A105N25): цена=99.2%, доходность=8.79%, дюрация=24.63 мес.
+MOEXsearchBonds. Строка 2 из 29: Банк ВТБ (ПАО) С-1-662 (RU000A0NRCJ8): цена=100%, доходность=0.01%, дюрация=0 мес.
+MOEXsearchBonds. Строка 3 из 29: МКПАО ОК РУСАЛ БО-05 (RU000A105104): цена=98.85%, доходность=7.71%, дюрация=4.43 мес.
+MOEXsearchBonds. Строка 4 из 29: МКПАО ОК РУСАЛ БО-06 (RU000A105112): цена=98.85%, доходность=6.83%, дюрация=4.43 мес.
+MOEXsearchBonds. Строка 5 из 29: Полюс ПБО-02 (RU000A1054W1): цена=94.3369%, доходность=5.77%, дюрация=39.36 мес.
+MOEXsearchBonds. Строка 6 из 29: МЕТАЛЛОИНВЕСТ 001P-01 (RU000A1057A0): цена=98.6566%, доходность=5.85%, дюрация=5.86 мес.
+MOEXsearchBonds. Строка 7 из 29: МЕТАЛЛОИНВЕСТ 001P-02 (RU000A1057D4): цена=93.6449%, доходность=5.84%, дюрация=39.76 мес.
+MOEXsearchBonds. Строка 8 из 29: ПАО НК Роснефть 002P-12 (RU000A1057S2): цена=98.83%, доходность=5.4%, дюрация=6.03 мес.
+MOEXsearchBonds. Строка 9 из 29: МКПАО ОК РУСАЛ БО-001Р-01 (RU000A105C44): цена=97.6999%, доходность=6.74%, дюрация=13 мес.
+MOEXsearchBonds. Строка 10 из 29: ЕАБР 003P-004 (RU000A105EV1): цена=94%, доходность=5.51%, дюрация=19.26 мес.
+MOEXsearchBonds. Строка 11 из 29: ГК Сегежа 003P-01R (RU000A105EW9): цена=85.3851%, доходность=15.04%, дюрация=19.16 мес.
+MOEXsearchBonds. Строка 12 из 29: Южуралзолото 001P-01 (RU000A105GS2): цена=99.2247%, доходность=4.77%, дюрация=8 мес.
+MOEXsearchBonds. Строка 13 из 29: МЕТАЛЛОИНВЕСТ 001P-03 (RU000A105M75): цена=96.2009%, доходность=5.66%, дюрация=20.43 мес.
+MOEXsearchBonds. Строка 14 из 29: ГМК Нор.никель БО-001Р-05 (RU000A105ML5): цена=99.79%, доходность=4.08%, дюрация=20.46 мес.
+MOEXsearchBonds. Строка 15 из 29: АЛЬФА-БАНК Б2Р20 (RU000A105NH1): цена=99.2499%, доходность=5.37%, дюрация=9.13 мес.
+MOEXsearchBonds. Строка 16 из 29: ГМК Нор.никель БО-001Р-06 (RU000A105NL3): цена=98.9919%, доходность=8.46%, дюрация=3.03 мес.
+MOEXsearchBonds. Строка 17 из 29: МКПАО ОК РУСАЛ БО-001P-02 (RU000A105PQ7): цена=98%, доходность=4.63%, дюрация=20.6 мес.
+MOEXsearchBonds. Строка 18 из 29: МКПАО ОК РУСАЛ БО-001P-03 (RU000A105Q06): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 19 из 29: ПАО НК Роснефть 002P-13 (RU000A105ZC6): цена=100%, доходность=6.61%, дюрация=11.9 мес.
+MOEXsearchBonds. Строка 20 из 29: Совкомфлот 001Р-01 CNY (RU000A1060Q0): цена=98.21%, доходность=5.8%, дюрация=23.03 мес.
+MOEXsearchBonds. Строка 21 из 29: Южуралзолото 001P-02 (RU000A1061L9): цена=99.78%, доходность=6.14%, дюрация=12.1 мес.
+MOEXsearchBonds. Строка 22 из 29: ФосАгро БО-П01-CNY (RU000A1063Z5): цена=99.7499%, доходность=10.01%, дюрация=0.73 мес.
+MOEXsearchBonds.   \-> Условие доходности (10 < 10.01% < 25), цены (60 < 99.7499% < 110) и дюрации (0 < 0.73 мес. < 12) для ФосАгро БО-П01-CNY прошло.
+MOEXsearchVolume. Ссылка для поиска объёма сделок RU000A1063Z5: https://iss.moex.com/iss/history/engines/stock/markets/bonds/boards/TQOY/securities/RU000A1063Z5.json?iss.meta=off&iss.only=history&history.columns=SECID,TRADEDATE,VOLUME,NUMTRADES&limit=20&from=2024-03-04
+MOEXsearchVolume. На 1-й день (2024-03-04) из 10 оборот по бумаге RU000A1063Z5 меньше чем 1000: 411 шт.
+MOEXsearchVolume. На 2-й день (2024-03-05) из 10 оборот по бумаге RU000A1063Z5 меньше чем 1000: 129 шт.
+MOEXsearchVolume. На 3-й день (2024-03-06) из 10 оборот по бумаге RU000A1063Z5 меньше чем 1000: 97 шт.
+MOEXsearchVolume. На 4-й день (2024-03-07) из 10 оборот по бумаге RU000A1063Z5 меньше чем 1000: 116 шт.
+MOEXsearchVolume. На 5-й день (2024-03-11) из 10 оборот по бумаге RU000A1063Z5 меньше чем 1000: 349 шт.
+MOEXsearchVolume. На 6-й день (2024-03-12) из 10 оборот по бумаге RU000A1063Z5 меньше чем 1000: 293 шт.
+MOEXsearchVolume. На 7-й день (2024-03-13) из 10 оборот по бумаге RU000A1063Z5 меньше чем 1000: 710 шт.
+MOEXsearchVolume. На 10-й день (2024-03-18) из 10 оборот по бумаге RU000A1063Z5 меньше чем 1000: 416 шт.
+MOEXsearchVolume. Итоговый оборот в бумагах (объем сделок, шт) за 10 дней: 5621 шт нарастающим итогом.
+MOEXsearchBonds. \-> Совокупный объем сделок за n дней: 5621, а условие 29000 шт.
+MOEXsearchBonds. Облигация ФосАгро БО-П01-CNY, RU000A1063Z5 в выборку не попадает из-за малых оборотов или доступно мало торговых дней.
+MOEXsearchBonds. Строка 23 из 29: ЕвроСибЭнерго-Гидро 001РС-01 (RU000A106797): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 24 из 29: МЕТАЛЛОИНВЕСТ 001P-05 (RU000A1071S3): цена=99.9065%, доходность=5.87%, дюрация=23.53 мес.
+MOEXsearchBonds. Строка 25 из 29: МКПАО ОК РУСАЛ БО-001P-05 (RU000A1076U8): цена=99.9999%, доходность=6.87%, дюрация=24.06 мес.
+MOEXsearchBonds. Строка 26 из 29: МЕТАЛЛОИНВЕСТ 001P-07 (RU000A107K18): цена=null%, доходность=0%, дюрация=0 мес.
+MOEXsearchBonds. Строка 27 из 29: МКПАО ОК РУСАЛ БО-001P-06 (RU000A107RH8): цена=100%, доходность=7.4%, дюрация=26.63 мес.
+MOEXsearchBonds. Строка 28 из 29: Уральская Сталь БО-001Р-03 (RU000A107U81): цена=100.4499%, доходность=6.97%, дюрация=21.96 мес.
+MOEXsearchBonds. Строка 29 из 29: Славянск ЭКО 001Р-03Y (RU000A1080Z9): цена=99.4998%, доходность=11.83%, дюрация=21.9 мес.
+MOEXsearchBonds. В массиве нет строк.
+
+Функция start закончила работу в 19.03.2024, 15:23:26.
+Время выполнения start в минутах: 0.03.
+
+D:\bond_search_v2>
