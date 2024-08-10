@@ -38,11 +38,11 @@ module.exports.start = start;
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 10 //Доходность больше этой цифры
-    const YieldLess = 25 //Доходность меньше этой цифры
+    const YieldMore = 15 //Доходность больше этой цифры
+    const YieldLess = 30 //Доходность меньше этой цифры
     const PriceMore = 60 //Цена больше этой цифры
     const PriceLess = 110 //Цена меньше этой цифры
-    const DurationMore = 6 //Дюрация больше этой цифры
+    const DurationMore = 3 //Дюрация больше этой цифры
     const DurationLess = 18 //Дюрация меньше этой цифры
     const VolumeMore = 1500 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const BondVolumeMore = 30000 // Совокупный объем сделок за n дней, шт. больше этой цифры
@@ -375,7 +375,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
             ${conditions}
         </ul>
         Составил <a href="https://github.com/empenoso" target="_blank"> Михаил Шардин</a>.<br>
-        <small>Подробнее про скрипт поиска ликвидных облигаций <a href="https://habr.com/ru/post/533016/ " target="_blank">в статье на Хабре</a>.</small></p>
+        <small>Подробнее про скрипт поиска ликвидных облигаций <a href="https://habr.com/ru/articles/835202/ " target="_blank">в статье на Хабре</a>.</small></p>
         <details>
             <summary>Техническая информация</summary><small>
                 <ol>
