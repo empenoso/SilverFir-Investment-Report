@@ -4,9 +4,7 @@
  * 
  * Модуль поиска облигаций по параметрам [2024_bond_search/index.js]
  * 
- * Описание:  (2024 год) 
- * Описание: https://habr.com/ru/post/533016/ (2021 год)
- * Описание: https://habr.com/ru/post/506720/ (2020 год) 
+ * Описание: https://habr.com/ru/articles/835202/
  * 
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
