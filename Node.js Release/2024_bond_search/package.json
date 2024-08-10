@@ -2,11 +2,11 @@
   "name": "moex-bond-search",
   "version": "0.3.0",
   "description": "Модуль поиска облигаций по параметрам на Московской бирже.",
-  "homepage": "https://fir.icu/",
+  "homepage": "https://empenoso.github.io/SilverFir-Investment-Report/",
   "main": "index.js",
   "dependencies": {
-    "node-fetch": "^2.6.0",
-    "moment": ""
+    "moment": "",
+    "node-fetch": ""
   },
   "scripts": {
     "start": "node index.js"

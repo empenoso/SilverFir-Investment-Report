@@ -1,14 +1,14 @@
 [Desktop Entry]
 Categories=
 Comment=Поиск замены депозита в облигациях
-Exec=node /home/mike/SynologyDrive/rabota/2018_investments/2020_04_node.js/bond_search_v2 2>&1 | tee /home/mike/SynologyDrive/rabota/2018_investments/2020_04_node.js/bond_search_v2/log/log_$(date +%F_%T).txt
+Exec=node /home/mike/2024_bond_search 2>&1 | tee /home/mike/2024_bond_search/log/log_$(date +%F_%T).txt
 GenericName=Поиск замены депозита в облигациях
 Icon=
 Keywords=Поиск замены депозита в облигациях
 MimeType=
 Name=Поиск замены депозита в облигациях
 NoDiplay=false
-Path=/home/mike/SynologyDrive/rabota/2018_investments/2020_04_node.js/bond_search_v2/
+Path=/home/mike/2024_bond_search/
 StartupNotify=false
 Terminal=true
 TerminalOptions=

@@ -1,16 +1,17 @@
 /**
  * SilverFir: Investment Report 🌲 [Node.js Release]
- * https://fir.icu/ (пока не работает)
+ * https://github.com/empenoso/SilverFir-Investment-Report
  * 
- * Модуль поиска облигаций по параметрам [bond_search_v2/index.js]
+ * Модуль поиска облигаций по параметрам [2024_bond_search/index.js]
  * 
+ * Описание:  (2024 год) 
  * Описание: https://habr.com/ru/post/533016/ (2021 год)
  * Описание: https://habr.com/ru/post/506720/ (2020 год) 
  * 
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 29.08.2023
+ * Last updated: 10.08.2024
  * 
  */
 
@@ -20,7 +21,7 @@ async function start() {
     let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
     console.log("Функция %s начала работу в %s. \n", getFunctionName(), (new Date()).toLocaleString("ru-RU"))
 
-    global.fetch = require("node-fetch")
+    global.fetch = (await import('node-fetch')).default;
     global.fs = require("fs")
     global.path = require('path')
     global.moment = require('moment')
@@ -75,7 +76,6 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
             count = list.length
             console.log('%s. Всего в списке: %s бумаг.', getFunctionName(), count)
             log += '<li>Всего в списке: ' + count + ' бумаг.</li>'
-            // for (var i = 0; i <= 200; i++) {
             for (var i = 0; i <= count - 1; i++) {
                 BondName = json.securities.data[i][1].replace(/\"/g, '').replace(/\'/g, '')
                 SECID = json.securities.data[i][0]
@@ -98,22 +98,25 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                         MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
                         MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
                         MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
+                        IsQualifiedInvestors = await MOEXsearchIsQualifiedInvestors(SECID)
                         log += MonthsOfPayments.log
                         if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
-                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                            console.log(`${getFunctionName()}. Для ${BondName} все даты будущих платежей с известным значением выплат.`)
-                            log += '<li>Для ' + BondName + ' все даты будущих платежей с известным значением выплат.</li>'
+                            bonds.push([BondName, SECID, IsQualifiedInvestors, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                            console.log(`${getFunctionName()}. Для ${BondName} (${SECID}) все даты будущих платежей с известным значением выплат.`)
+                            log += `<li>Для ${BondName} (${SECID}) все даты будущих платежей с известным значением выплат.</li>`
                             console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
                             log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
-                        }
-                        if (OfferYesNo == "НЕТ") {
-                            bonds.push([BondName, SECID, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                        } else if (OfferYesNo == "НЕТ") {
+                            bonds.push([BondName, SECID, IsQualifiedInvestors, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
                             console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
                             log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                        } else {
+                            console.log(`${getFunctionName()}. Облигация ${BondName} (${SECID}) в выборку не попадает из-за того, что есть даты когда значения выплат неизвестны.`)
+                            log += `<li>Облигация ${BondName} (${SECID}) в выборку не попадает из-за того, что есть даты когда значения выплат неизвестны.</li>`
                         }
                     } else {
-                        console.log(`${getFunctionName()}. Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
-                        log += `<li>Облигация ${BondName}, ${SECID} в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
+                        console.log(`${getFunctionName()}. Облигация ${BondName} (${SECID}) в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
+                        log += `<li>Облигация ${BondName} (${SECID}) в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
                     }
                 }
 
@@ -128,8 +131,8 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
         return "В массиве нет строк"
     }
     bonds.sort(function (x, y) { // сортировка по столбцу Объем сделок за n дней, шт.
-        var xp = x[3];
-        var yp = y[3];
+        var xp = x[4];
+        var yp = y[4];
         return xp == yp ? 0 : xp > yp ? -1 : 1;
     });
     log += `<li>Поиск завершён ${new Date().toLocaleString("ru-RU")}.</li>`
@@ -210,10 +213,13 @@ module.exports.MOEXboardID = MOEXboardID;
 
 async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, когда происходят выплаты
     var log = ''
-    const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons`
-    // для бумаг с большим количеством выплат АПИ выводит только первые 19 выплат, например:
-    // https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/RU000A100CG7
-    // https://bonds.finam.ru/issue/details0251800002/default.asp
+    const url = `https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/${ID}.json?iss.meta=off&iss.only=coupons&start=0&limit=100`
+
+    // для бумаг с большим количеством выплат АПИ выводит только первые 20 выплат, например:
+    // https://iss.moex.com/iss/statistics/engines/stock/markets/bonds/bondization/RU000A106EM8
+    // https://bonds.finam.ru/issue/details036F600002/default.asp
+    // решено добавлением &start=0&limit=100
+
     console.log(`${getFunctionName()}. Ссылка для поиска месяцев выплат для ${ID}: ${url}.`)
     try {
         const response = await fetch(url)
@@ -235,6 +241,7 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
                 }
             }
         }
+
         if (value_rubNull > 0) {
             console.log(`${getFunctionName()}. Для ${ID} есть ${value_rubNull} дат(ы) будущих платежей с неизвестным значением выплат.`)
             log += `<li>Поиск выплат. Для ${ID} есть ${value_rubNull} дат(ы) будущих платежей с неизвестным значением выплат.</li>`
@@ -276,22 +283,28 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
 }
 module.exports.MOEXsearchMonthsOfPayments = MOEXsearchMonthsOfPayments;
 
-async function MOEXsearchTax(ID) { //налоговые льготы для корпоративных облигаций, выпущенных с 1 января 2017 года. Неактуально с 1 января 2021 года
-    const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=description`
-    console.log('%s. Ссылка для %s: %s', getFunctionName(), ID, url)
+async function MOEXsearchIsQualifiedInvestors(ID) { // Определяем это бумага для квалифицированных инвесторов или нет
+    const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=description&description.columns=name,title,value`
+    console.log(`${getFunctionName()}. Ссылка для поиска общей информации по ${ID}: ${url}`)
     try {
         const response = await fetch(url)
         const json = await response.json()
-        STARTDATEMOEX = json.description.data.find(e => e[0] === 'STARTDATEMOEX')[2];
-        // DAYSTOREDEMPTION = json.description.data.find(e => e[0] === 'DAYSTOREDEMPTION')[2]; //получение кол-ва оставшихся дней по погашения
-        console.log("%s. Дата принятия решения о включении ценной бумаги в Список для %s: %s.", getFunctionName(), ID, STARTDATEMOEX);
-        const trueFalse = new Date(STARTDATEMOEX) > new Date('2017-01-01')
-        return trueFalse
+        ISQUALIFIEDINVESTORS = json.description.data.find(e => e[0] === 'ISQUALIFIEDINVESTORS')[2]
+        ISQUALIFIEDINVESTORS = parseInt(ISQUALIFIEDINVESTORS, 10)
+        // console.log(`${getFunctionName()}. Значение ISQUALIFIEDINVESTORS для ${ID} = ${ISQUALIFIEDINVESTORS}.`)
+        if (ISQUALIFIEDINVESTORS === 0) {
+            console.log(`${getFunctionName()}. Для ${ID} квалификация для покупки НЕ нужна.`);
+            return 'нет'
+        } else {
+            QUALINVESTORGROUP = json.description.data.find(e => e[0] === 'QUALINVESTORGROUP')[2]
+            console.log(`${getFunctionName()}. ${ID} это бумага для квалифицированных инвесторов категории: "${QUALINVESTORGROUP}"`);
+            return 'да'
+        }
     } catch (e) {
-        console.log('Ошибка в %s', getFunctionName())
+        console.log(`Ошибка в ${getFunctionName()}`)
     }
 }
-module.exports.MOEXsearchTax = MOEXsearchTax;
+module.exports.MOEXsearchIsQualifiedInvestors = MOEXsearchIsQualifiedInvestors;
 
 /**
  * Общие вспомогательные функции
@@ -317,10 +330,11 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
 
                 data.addColumn('string', 'Полное наименование');
                 data.addColumn('string', 'Код ценной бумаги');
+                data.addColumn('string', 'Нужна<br>квалификация?');
                 data.addColumn('number', 'Цена, %');
-                data.addColumn('number', 'Объем сделок , шт.'); // с ${moment().subtract(15, 'days').format('DD.MM.YYYY')}
+                data.addColumn('number', 'Объем сделок<br>с ${moment().subtract(15, 'days').format('DD.MM.YYYY')}, шт.'); 
                 data.addColumn('number', 'Доходность');
-                data.addColumn('number', 'Дюрация, месяцев');
+                data.addColumn('number', 'Дюрация,<br>месяцев');
                 data.addColumn('string', 'Месяцы выплат');
                 data.addRows(
                     ${JSON.stringify(bonds).replace(/\"/g, '\'')}
@@ -330,8 +344,9 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
                     showRowNumber: true,
                     width: '100%',
                     height: '100%',
-                    sortColumn: 3,
-                    sortAscending: false
+                    sortColumn: 4,
+                    sortAscending: false,
+                    allowHtml: true // Включает рендеринг HTML
                 });
             }
         </script>
@@ -357,7 +372,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
             <small>(JavaScript в этом браузере отключён, поэтому таблица не динамическая)</small>
         </noscript>
         <div id="table_div"></div>
-        <p>Выборка сгенерирована ${moment().format('DD.MM.YYYY')} по условиям 🔎:
+        <p>Выборка сгенерирована ${moment().format('DD.MM.YYYY в HH:mm:ss')} по условиям 🔎:
         <ul>
             ${conditions}
         </ul>
@@ -388,6 +403,7 @@ function makeTableHTML(bonds) { //генерируем html таблицу из 
         <tr>
             <td>Полное наименование</td>
             <td>Код ценной бумаги</td>
+            <td>Нужна квалификация?</td>
             <td>Цена, %</td>
             <td>Объем сделок за n дней, шт.</td>
             <td>Доходность</td>

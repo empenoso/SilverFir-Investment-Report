@@ -8,5 +8,7 @@ echo Wait, under Windows %COMPUTERNAME% there is no process display
 echo Check "log_%ldt%.txt" in "log" folder AFTER closing this window
 echo Process started at %ldt%
 pushd %~dp0
-cmd /q /k node "%~dp0index.js" > "%~dp0log\log_%ldt%.txt"
+cmd /q /c node "%~dp0index.js" > "%~dp0log\log_%ldt%.txt"
+echo Process finished. Check the log file "log_%ldt%.txt" for details.
+pause
 exit
