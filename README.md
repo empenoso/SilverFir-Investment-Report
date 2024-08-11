@@ -9,9 +9,9 @@
 
 ### Скрипт поиска ликвидных облигаций на Мосбирже в качестве замены депозита
 
-:round_pushpin: Версия поиска на Node.js с учётом исправлений и дополнений на [Хабре](https://habr.com/ru/articles/835202/) (август 2024 г). :star:
+:star: Версия поиска на Node.js с учётом исправлений и дополнений на [Хабре](https://habr.com/ru/articles/835202/) (август 2024 г). 
 
-:round_pushpin: Версия поиска в Гугл таблице с изменениями, описанными в статье [Тинькофф-журнала (Т—Ж)](https://journal.tinkoff.ru/moex-bond-3/) (сентябрь 2023 г). :star:
+:star: Версия поиска в Гугл таблице с изменениями, описанными в статье [Тинькофф-журнала (Т—Ж)](https://journal.tinkoff.ru/moex-bond-3/) (сентябрь 2023 г).
 
 :round_pushpin: Версия поиска в Гугл таблице с учётом изменения налогообложения в 2021 году в статье [Тинькофф-журнала (Т—Ж)](https://journal.tinkoff.ru/moex-bond-2/) (май 2021 г).
 
@@ -26,7 +26,7 @@
 * * * * *
 
 ### Гугл таблица на русском языке (реализована на формулах)
-:round_pushpin: [Версия таблицы в этой редакции](https://docs.google.com/spreadsheets/d/12WxMr2dpx9tHUVGU5uL0KCmlj3khIP6PI9cZ0xLmbuA/edit?usp=sharing) на апрель 2020 г. :star:
+:star: [Версия таблицы в этой редакции](https://docs.google.com/spreadsheets/d/12WxMr2dpx9tHUVGU5uL0KCmlj3khIP6PI9cZ0xLmbuA/edit?usp=sharing) на апрель 2020 г. 
 
 :round_pushpin: Статья в [Тинькофф-журнале (Т—Ж)](https://journal.tinkoff.ru/investment-report/) (апрель 2020 г).
 
@@ -34,7 +34,7 @@
 
 ### Гугл таблица на английском языке (реализована на формулах + скрипты)
 
-:round_pushpin:  [Версия таблицы в этой редакции](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) на февраль 2020 г. :star:
+:star:  [Версия таблицы в этой редакции](https://docs.google.com/spreadsheets/d/1iNhWf2WdEFzD41gd6Zl98ILGu4KBg8Hr9gETJHr-4bc/edit?usp=sharing) на февраль 2020 г. 
 
 :round_pushpin: Больше технических подробностей по предыстории создания в статье на [Хабре](https://habr.com/ru/post/477920/#Google) (декабрь 2019 г).
 
