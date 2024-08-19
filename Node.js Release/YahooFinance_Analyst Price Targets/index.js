@@ -24,8 +24,8 @@ async function start() {
     global.moment = require('moment')
     moment.locale('ru')
 
-    const sumOfRecommendationsMore = 20 // Количество компаний аналитиков проводивших анализ за два месяца
-    const GrowthPotentialMore = 40 // Потенциал роста, %    
+    const sumOfRecommendationsMore = 7 // Количество компаний аналитиков проводивших анализ за два месяца
+    const GrowthPotentialMore = 25 // Потенциал роста, %    
     const YieldMore = 0 // Текущая дивидендная доходность, %
 
     const conditions = `<li>Потенциал роста, % >= ${GrowthPotentialMore}</li>
@@ -411,7 +411,8 @@ async function HTMLgenerate(array, conditions, log) { //генерировани
         <ol>
             ${conditions}
         </ol>
-        Составил <a href="https://shardin.name/" target="_blank"> Михаил Шардин</a>.</p>
+        Составил <a href="https://shardin.name/" target="_blank"> Михаил Шардин</a>.<br>
+        <small>Подробнее про систему поиска недооцененных американских акций, используя данные Яху Финанс <a href="https://habr.com/ru/articles/836450/" target="_blank">в статье на Хабре</a>.</small></p>
         <details>
             <summary>Техническая информация</summary><small>
                 <ol>
@@ -424,7 +425,7 @@ async function HTMLgenerate(array, conditions, log) { //генерировани
     </html>`
 
     try {
-        fs.writeFileSync(path.resolve(__dirname, `./searching_results/YahooFinance_Recommendation_${moment().format('YYYY-MM-DD')}_дом.html`), hmtl)
+        fs.writeFileSync(path.resolve(__dirname, `./searching_results/YahooFinance_Recommendation_${moment().format('YYYY-MM-DD')}.html`), hmtl)
         console.log(`\nЗаписано на диск с именем ${moment().format('YYYY-MM-DD')}.html`)
     } catch (e) {
         console.log('Ошибка в %s', getFunctionName())
