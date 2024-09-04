@@ -86,7 +86,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
         console.log(`${getFunctionName()}. Ссылка поиска всех доступных облигаций группы: ${url}.`)
         log += `<li><b>Ссылка поиска всех доступных облигаций группы ${t}: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
         try {
-            await delay((Math.random() * (3 - 1) + 1) * 1000); //1...3 секунд
+            await delay((Math.random() * (3 - 1) + 1) * 500); //0,5...1,5 секунд
             const response = await fetch(url)
             const json = await response.json()
             // if (json.marketdata.data[0][1] == 0) {
@@ -181,7 +181,7 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
     console.log('%s. Ссылка для поиска объёма сделок %s: %s', getFunctionName(), ID, url)
     log += `<li>Поиск оборота. Ссылка: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
     try {
-        await delay((Math.random() * (3 - 1) + 1) * 1000); //1...3 секунд
+        await delay((Math.random() * (3 - 1) + 1) * 500); //0,5...1,5 секунд
         const response = await fetch(url)
         const json = await response.json()
         let list = json.history.data
@@ -222,7 +222,7 @@ module.exports.MOEXsearchVolume = MOEXsearchVolume;
 async function MOEXboardID(ID) { //узнаем boardid любой бумаги по тикеру
     const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=boards&boards.columns=secid,boardid,is_primary`
     try {
-        await delay((Math.random() * (3 - 1) + 1) * 1000); //1...3 секунд
+        await delay((Math.random() * (3 - 1) + 1) * 500); //0,5...1,5 секунд
         const response = await fetch(url)
         const json = await response.json()
         boardID = json.boards.data.find(e => e[2] === 1)[1]
@@ -245,7 +245,7 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
 
     console.log(`${getFunctionName()}. Ссылка для поиска месяцев выплат для ${ID}: ${url}.`)
     try {
-        await delay((Math.random() * (3 - 1) + 1) * 1000); //1...3 секунд
+        await delay((Math.random() * (3 - 1) + 1) * 500); //0,5...1,5 секунд
         const response = await fetch(url)
         const json = await response.json()
         var couponDates = []
@@ -311,7 +311,7 @@ async function MOEXsearchIsQualifiedInvestors(ID) { // Определяем эт
     const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=description&description.columns=name,title,value`
     console.log(`${getFunctionName()}. Ссылка для поиска общей информации по ${ID}: ${url}`)
     try {
-        await delay((Math.random() * (3 - 1) + 1) * 1000); //1...3 секунд
+        await delay((Math.random() * (3 - 1) + 1) * 500); //0,5...1,5 секунд
         const response = await fetch(url)
         const json = await response.json()
         ISQUALIFIEDINVESTORS = json.description.data.find(e => e[0] === 'ISQUALIFIEDINVESTORS')[2]
