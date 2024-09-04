@@ -9,11 +9,13 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 10.08.2024
+ * Last updated: 05.09.2024
  * 
  */
 
 start()
+
+// test()
 
 async function start() {
     let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
@@ -23,6 +25,7 @@ async function start() {
     global.fs = require("fs")
     global.path = require('path')
     global.moment = require('moment')
+    global.delay = await loadDelay()
 
     await MOEXsearchBonds()
 
@@ -33,18 +36,37 @@ async function start() {
 }
 module.exports.start = start;
 
+async function test() {
+    let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
+    console.log("Функция %s начала работу в %s. \n", getFunctionName(), (new Date()).toLocaleString("ru-RU"))
+
+    global.fetch = (await import('node-fetch')).default;
+    global.fs = require("fs")
+    global.path = require('path')
+    global.moment = require('moment')
+    const delay = await loadDelay()
+
+    await MOEXsearchVolume("RU000A107U81", 50)
+
+    let currTime = (new Date()).getTime();
+    let duration = Math.round((currTime - startTime) / 1000 / 60 * 100) / 100; //время выполнения скрипта в минутах
+    console.log("\nФункция %s закончила работу в %s.", getFunctionName(), (new Date()).toLocaleString("ru-RU"))
+    console.log("Время выполнения %s в минутах: %s.", getFunctionName(), duration)
+}
+module.exports.test = test;
+
 /**
  * Основная функция
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 15 //Доходность больше этой цифры
+    const YieldMore = 10 //Доходность больше этой цифры
     const YieldLess = 30 //Доходность меньше этой цифры
     const PriceMore = 60 //Цена больше этой цифры
     const PriceLess = 110 //Цена меньше этой цифры
     const DurationMore = 3 //Дюрация больше этой цифры
     const DurationLess = 18 //Дюрация меньше этой цифры
-    const VolumeMore = 1500 //Объем сделок в каждый из n дней, шт. больше этой цифры
+    const VolumeMore = 900 //Объем сделок в каждый из n дней, шт. больше этой цифры
     const BondVolumeMore = 30000 // Совокупный объем сделок за n дней, шт. больше этой цифры
     const OfferYesNo = "ДА" //Учитывать, чтобы денежные выплаты были известны до самого погашения? 
     // ДА - облигации только с известными цифрами выплаты купонов
@@ -59,11 +81,12 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     var bonds = []
     var count
     var log = `<li>Поиск начат ${new Date().toLocaleString("ru-RU")}.</li>`
-    for (const t of [58, 193, 105, 77, 207, 167, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/
+    for (const t of [58, 193, 105, 77, 207, 167, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/        
         const url = `https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/${t}/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION`
         console.log(`${getFunctionName()}. Ссылка поиска всех доступных облигаций группы: ${url}.`)
         log += `<li><b>Ссылка поиска всех доступных облигаций группы ${t}: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
         try {
+            await delay((Math.random() * (5 - 1) + 1) * 1000); //1...5 секунд
             const response = await fetch(url)
             const json = await response.json()
             // if (json.marketdata.data[0][1] == 0) {
@@ -121,7 +144,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
             }
         } catch (e) {
             console.log(`Ошибка в ${getFunctionName()}: ${e}.`)
-            log += '<li>Ошибка в  ' + getFunctionName() + '.</li>'
+            log += '<li>Ошибка в ' + getFunctionName() + '.</li>'
         }
     }
     if (bonds == 0) {
@@ -158,6 +181,7 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
     console.log('%s. Ссылка для поиска объёма сделок %s: %s', getFunctionName(), ID, url)
     log += `<li>Поиск оборота. Ссылка: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
     try {
+        await delay((Math.random() * (5 - 1) + 1) * 1000); //1...5 секунд
         const response = await fetch(url)
         const json = await response.json()
         let list = json.history.data
@@ -198,6 +222,7 @@ module.exports.MOEXsearchVolume = MOEXsearchVolume;
 async function MOEXboardID(ID) { //узнаем boardid любой бумаги по тикеру
     const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=boards&boards.columns=secid,boardid,is_primary`
     try {
+        await delay((Math.random() * (5 - 1) + 1) * 1000); //1...5 секунд
         const response = await fetch(url)
         const json = await response.json()
         boardID = json.boards.data.find(e => e[2] === 1)[1]
@@ -220,6 +245,7 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
 
     console.log(`${getFunctionName()}. Ссылка для поиска месяцев выплат для ${ID}: ${url}.`)
     try {
+        await delay((Math.random() * (5 - 1) + 1) * 1000); //1...5 секунд
         const response = await fetch(url)
         const json = await response.json()
         var couponDates = []
@@ -285,6 +311,7 @@ async function MOEXsearchIsQualifiedInvestors(ID) { // Определяем эт
     const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=description&description.columns=name,title,value`
     console.log(`${getFunctionName()}. Ссылка для поиска общей информации по ${ID}: ${url}`)
     try {
+        await delay((Math.random() * (5 - 1) + 1) * 1000); //1...5 секунд
         const response = await fetch(url)
         const json = await response.json()
         ISQUALIFIEDINVESTORS = json.description.data.find(e => e[0] === 'ISQUALIFIEDINVESTORS')[2]
@@ -305,7 +332,7 @@ async function MOEXsearchIsQualifiedInvestors(ID) { // Определяем эт
 module.exports.MOEXsearchIsQualifiedInvestors = MOEXsearchIsQualifiedInvestors;
 
 /**
- * Общие вспомогательные функции
+ * Генерация таблиц
  */
 
 async function HTMLgenerate(bonds, conditions, log) { //генерирование HTML https://developers.google.com/chart/interactive/docs/gallery/table?hl=ru
@@ -419,6 +446,15 @@ function makeTableHTML(bonds) { //генерируем html таблицу из 
     return result;
 }
 
+/**
+ * Общие вспомогательные функции
+ */
+
 function getFunctionName() { //автоматически получаем имя функции
     return (new Error()).stack.split('\n')[2].split(' ')[5];
+}
+
+async function loadDelay() {
+    const delay = (await import('delay')).default
+    return delay
 }

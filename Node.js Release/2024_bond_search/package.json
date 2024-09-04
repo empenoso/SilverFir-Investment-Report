@@ -5,6 +5,7 @@
   "homepage": "https://empenoso.github.io/SilverFir-Investment-Report/",
   "main": "index.js",
   "dependencies": {
+    "delay": "^6.0.0",
     "moment": "",
     "node-fetch": ""
   },
