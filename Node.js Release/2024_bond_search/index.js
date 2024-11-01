@@ -9,7 +9,7 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 05.09.2024
+ * Last updated: 01.11.2024
  * 
  */
 
@@ -25,7 +25,6 @@ async function start() {
     global.fs = require("fs")
     global.path = require('path')
     global.moment = require('moment')
-    global.delay = await loadDelay()
 
     await MOEXsearchBonds()
 
@@ -44,7 +43,7 @@ async function test() {
     global.fs = require("fs")
     global.path = require('path')
     global.moment = require('moment')
-    const delay = await loadDelay()
+    // const delay = await loadDelay()
 
     await MOEXsearchVolume("RU000A107U81", 50)
 
@@ -86,7 +85,10 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
         console.log(`${getFunctionName()}. Ссылка поиска всех доступных облигаций группы: ${url}.`)
         log += `<li><b>Ссылка поиска всех доступных облигаций группы ${t}: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
         try {
-            await delay((Math.random() * (15 - 3) + 3) * 1000); //3...15 секунд
+
+            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
+
             const response = await fetch(url)
             const json = await response.json()
             // if (json.marketdata.data[0][1] == 0) {
@@ -98,47 +100,55 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
             console.log('%s. Всего в списке: %s бумаг.', getFunctionName(), count)
             log += '<li>Всего в списке: ' + count + ' бумаг.</li>'
             for (var i = 0; i <= count - 1; i++) {
-                BondName = json.securities.data[i][1].replace(/\"/g, '').replace(/\'/g, '')
-                SECID = json.securities.data[i][0]
-                BondPrice = json.securities.data[i][2]
-                BondYield = json.marketdata.data[i][1]
-                BondDuration = Math.floor((json.marketdata.data[i][2] / 30) * 100) / 100 // кол-во оставшихся месяцев 
-                console.log(`${getFunctionName()} в ${moment().format("HH:mm:ss")}. Строка ${i + 1} из ${count}: ${BondName} (${SECID}): цена=${BondPrice}%, доходность=${BondYield}%, дюрация=${BondDuration} мес.`)
-                log += '<li>Строка ' + (i + 1) + ' из ' + count + ': ' + BondName + ' (' + SECID + '): цена=' + BondPrice + '%, доходность=' + BondYield + '%, дюрация=' + BondDuration + ' мес.</li>'
-                if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
-                    BondPrice > PriceMore && BondPrice < PriceLess &&
-                    BondDuration > DurationMore && BondDuration < DurationLess) {
-                    console.log(`${getFunctionName()}.   \\-> Условие доходности (${YieldMore} < ${BondYield}% < ${YieldLess}), цены (${PriceMore} < ${BondPrice}% < ${PriceLess}) и дюрации (${DurationMore} < ${BondDuration} мес. < ${DurationLess}) для ${BondName} прошло.`)
-                    volume = await MOEXsearchVolume(SECID, VolumeMore)
-                    let BondVolume = volume.value
-                    log += volume.log
-                    console.log(`${getFunctionName()}. \\-> Совокупный объем сделок за n дней: ${BondVolume}, а условие ${BondVolumeMore} шт.`)
-                    if (volume.lowLiquid == 0 && BondVolume > BondVolumeMore) { // lowLiquid: 0 и 1 - переключатели. 
-                        //❗ 0 - чтобы оборот был строго больше заданного
-                        //❗ 1 - фильтр оборота не учитывается, в выборку попадают все бумаги, подходящие по остальным параметрам
-                        MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
-                        MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
-                        MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
-                        IsQualifiedInvestors = await MOEXsearchIsQualifiedInvestors(SECID)
-                        log += MonthsOfPayments.log
-                        if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
-                            bonds.push([BondName, SECID, IsQualifiedInvestors, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                            console.log(`${getFunctionName()}. Для ${BondName} (${SECID}) все даты будущих платежей с известным значением выплат.`)
-                            log += `<li>Для ${BondName} (${SECID}) все даты будущих платежей с известным значением выплат.</li>`
-                            console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
-                            log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
-                        } else if (OfferYesNo == "НЕТ") {
-                            bonds.push([BondName, SECID, IsQualifiedInvestors, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
-                            console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
-                            log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+
+                // если из-за сетевой ошибки цикл прервался, тогда повтор
+                let success = false;
+                while (!success) {
+
+                    BondName = json.securities.data[i][1].replace(/\"/g, '').replace(/\'/g, '')
+                    SECID = json.securities.data[i][0]
+                    BondPrice = json.securities.data[i][2]
+                    BondYield = json.marketdata.data[i][1]
+                    BondDuration = Math.floor((json.marketdata.data[i][2] / 30) * 100) / 100 // кол-во оставшихся месяцев 
+                    console.log(`${getFunctionName()} в ${moment().format("HH:mm:ss")}. Строка ${i + 1} из ${count}: ${BondName} (${SECID}): цена=${BondPrice}%, доходность=${BondYield}%, дюрация=${BondDuration} мес.`)
+                    log += '<li>Строка ' + (i + 1) + ' из ' + count + ': ' + BondName + ' (' + SECID + '): цена=' + BondPrice + '%, доходность=' + BondYield + '%, дюрация=' + BondDuration + ' мес.</li>'
+                    if (BondYield > YieldMore && BondYield < YieldLess && //условия выборки
+                        BondPrice > PriceMore && BondPrice < PriceLess &&
+                        BondDuration > DurationMore && BondDuration < DurationLess) {
+                        console.log(`${getFunctionName()}.   \\-> Условие доходности (${YieldMore} < ${BondYield}% < ${YieldLess}), цены (${PriceMore} < ${BondPrice}% < ${PriceLess}) и дюрации (${DurationMore} < ${BondDuration} мес. < ${DurationLess}) для ${BondName} прошло.`)
+                        volume = await MOEXsearchVolume(SECID, VolumeMore)
+                        let BondVolume = volume.value
+                        log += volume.log
+                        console.log(`${getFunctionName()}. \\-> Совокупный объем сделок за n дней: ${BondVolume}, а условие ${BondVolumeMore} шт.`)
+                        if (volume.lowLiquid == 0 && BondVolume > BondVolumeMore) { // lowLiquid: 0 и 1 - переключатели. 
+                            //❗ 0 - чтобы оборот был строго больше заданного
+                            //❗ 1 - фильтр оборота не учитывается, в выборку попадают все бумаги, подходящие по остальным параметрам
+                            MonthsOfPayments = await MOEXsearchMonthsOfPayments(SECID)
+                            MonthsOfPaymentsDates = MonthsOfPayments.formattedDates
+                            MonthsOfPaymentsNull = MonthsOfPayments.value_rubNull
+                            IsQualifiedInvestors = await MOEXsearchIsQualifiedInvestors(SECID)
+                            log += MonthsOfPayments.log
+                            if (OfferYesNo == "ДА" && MonthsOfPaymentsNull == 0) {
+                                bonds.push([BondName, SECID, IsQualifiedInvestors, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                                console.log(`${getFunctionName()}. Для ${BondName} (${SECID}) все даты будущих платежей с известным значением выплат.`)
+                                log += `<li>Для ${BondName} (${SECID}) все даты будущих платежей с известным значением выплат.</li>`
+                                console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                                log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                            } else if (OfferYesNo == "НЕТ") {
+                                bonds.push([BondName, SECID, IsQualifiedInvestors, BondPrice, BondVolume, BondYield, BondDuration, MonthsOfPaymentsDates])
+                                console.log('%s. Результат № %s: %s.', getFunctionName(), bonds.length, JSON.stringify(bonds[bonds.length - 1]))
+                                log += '<li><b>Результат № ' + bonds.length + ': ' + JSON.stringify(bonds[bonds.length - 1]) + '.</b></li>'
+                            } else {
+                                console.log(`${getFunctionName()}. Облигация ${BondName} (${SECID}) в выборку не попадает из-за того, что есть даты когда значения выплат неизвестны.`)
+                                log += `<li>Облигация ${BondName} (${SECID}) в выборку не попадает из-за того, что есть даты когда значения выплат неизвестны.</li>`
+                            }
                         } else {
-                            console.log(`${getFunctionName()}. Облигация ${BondName} (${SECID}) в выборку не попадает из-за того, что есть даты когда значения выплат неизвестны.`)
-                            log += `<li>Облигация ${BondName} (${SECID}) в выборку не попадает из-за того, что есть даты когда значения выплат неизвестны.</li>`
+                            console.log(`${getFunctionName()}. Облигация ${BondName} (${SECID}) в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
+                            log += `<li>Облигация ${BondName} (${SECID}) в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
                         }
-                    } else {
-                        console.log(`${getFunctionName()}. Облигация ${BondName} (${SECID}) в выборку не попадает из-за малых оборотов или доступно мало торговых дней.`)
-                        log += `<li>Облигация ${BondName} (${SECID}) в выборку не попадает из-за малых оборотов или доступно мало торговых дней.</li>`
                     }
+
+                    success = true; // Если действие прошло успешно, выход из цикла
                 }
 
             }
@@ -181,10 +191,20 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
     console.log('%s. Ссылка для поиска объёма сделок %s: %s', getFunctionName(), ID, url)
     log += `<li>Поиск оборота. Ссылка: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
     try {
-        await delay((Math.random() * (15 - 3) + 3) * 1000); //3...15 секунд
-        const response = await fetch(url)
-        const json = await response.json()
-        let list = json.history.data
+
+        // если из-за сетевой ошибки цикл прервался, тогда повтор
+        let success = false;
+        while (!success) {
+            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
+
+            const response = await fetch(url)
+            const json = await response.json()
+            let list = json.history.data
+
+            success = true; // Если действие прошло успешно, выход из цикла
+        }
+
         let count = list.length
         var volume_sum = 0
         var lowLiquid = 0
@@ -222,9 +242,19 @@ module.exports.MOEXsearchVolume = MOEXsearchVolume;
 async function MOEXboardID(ID) { //узнаем boardid любой бумаги по тикеру
     const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=boards&boards.columns=secid,boardid,is_primary`
     try {
-        await delay((Math.random() * (15 - 3) + 3) * 1000); //3...15 секунд
-        const response = await fetch(url)
-        const json = await response.json()
+
+        // если из-за сетевой ошибки цикл прервался, тогда повтор
+        let success = false;
+        while (!success) {
+            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
+
+            const response = await fetch(url)
+            const json = await response.json()
+
+            success = true; // Если действие прошло успешно, выход из цикла
+        }
+
         boardID = json.boards.data.find(e => e[2] === 1)[1]
         // console.log("%s. boardID для %s: %s", getFunctionName(), ID, boardID);
         return boardID
@@ -245,9 +275,19 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
 
     console.log(`${getFunctionName()}. Ссылка для поиска месяцев выплат для ${ID}: ${url}.`)
     try {
-        await delay((Math.random() * (15 - 3) + 3) * 1000); //3...15 секунд
-        const response = await fetch(url)
-        const json = await response.json()
+
+        // если из-за сетевой ошибки цикл прервался, тогда повтор
+        let success = false;
+        while (!success) {
+            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
+
+            const response = await fetch(url)
+            const json = await response.json()
+
+            success = true; // Если действие прошло успешно, выход из цикла
+        }
+
         var couponDates = []
         var value_rubNull = 0
         for (var i = 0; i <= json.coupons.data.length - 1; i++) {
@@ -311,9 +351,19 @@ async function MOEXsearchIsQualifiedInvestors(ID) { // Определяем эт
     const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=description&description.columns=name,title,value`
     console.log(`${getFunctionName()}. Ссылка для поиска общей информации по ${ID}: ${url}`)
     try {
-        await delay((Math.random() * (15 - 3) + 3) * 1000); //3...15 секунд
-        const response = await fetch(url)
-        const json = await response.json()
+
+        // если из-за сетевой ошибки цикл прервался, тогда повтор
+        let success = false;
+        while (!success) {
+            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
+
+            const response = await fetch(url)
+            const json = await response.json()
+
+            success = true; // Если действие прошло успешно, выход из цикла
+        }
+
         ISQUALIFIEDINVESTORS = json.description.data.find(e => e[0] === 'ISQUALIFIEDINVESTORS')[2]
         ISQUALIFIEDINVESTORS = parseInt(ISQUALIFIEDINVESTORS, 10)
         // console.log(`${getFunctionName()}. Значение ISQUALIFIEDINVESTORS для ${ID} = ${ISQUALIFIEDINVESTORS}.`)
@@ -454,7 +504,7 @@ function getFunctionName() { //автоматически получаем им�
     return (new Error()).stack.split('\n')[2].split(' ')[5];
 }
 
-async function loadDelay() {
-    const delay = (await import('delay')).default
-    return delay
-}
+// async function loadDelay() {
+//     const delay = (await import('delay')).default
+//     return delay
+// }
