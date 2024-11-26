@@ -58,7 +58,7 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
     var bonds = []
     var count
-    var errorCounter
+    var errorCounter = 0; // Счётчик ошибок соединений с серварами Московской биржи
     var log = `<li>Поиск начат ${new Date().toLocaleString("ru-RU")}.</li>`
     for (const t of [58, 193, 105, 77, 207, 167, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/        
         const url = `https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/${t}/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION`
