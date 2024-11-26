@@ -9,13 +9,11 @@
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 01.11.2024
+ * Last updated: 26.11.2024
  * 
  */
 
 start()
-
-// test()
 
 async function start() {
     let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
@@ -35,32 +33,13 @@ async function start() {
 }
 module.exports.start = start;
 
-async function test() {
-    let startTime = (new Date()).getTime(); //записываем текущее время в формате Unix Time Stamp - Epoch Converter
-    console.log("Функция %s начала работу в %s. \n", getFunctionName(), (new Date()).toLocaleString("ru-RU"))
-
-    global.fetch = (await import('node-fetch')).default;
-    global.fs = require("fs")
-    global.path = require('path')
-    global.moment = require('moment')
-    // const delay = await loadDelay()
-
-    await MOEXsearchVolume("RU000A107U81", 50)
-
-    let currTime = (new Date()).getTime();
-    let duration = Math.round((currTime - startTime) / 1000 / 60 * 100) / 100; //время выполнения скрипта в минутах
-    console.log("\nФункция %s закончила работу в %s.", getFunctionName(), (new Date()).toLocaleString("ru-RU"))
-    console.log("Время выполнения %s в минутах: %s.", getFunctionName(), duration)
-}
-module.exports.test = test;
-
 /**
  * Основная функция
  */
 
 async function MOEXsearchBonds() { //поиск облигаций по параметрам
-    const YieldMore = 10 //Доходность больше этой цифры
-    const YieldLess = 30 //Доходность меньше этой цифры
+    const YieldMore = 15 //Доходность больше этой цифры
+    const YieldLess = 40 //Доходность меньше этой цифры
     const PriceMore = 60 //Цена больше этой цифры
     const PriceLess = 110 //Цена меньше этой цифры
     const DurationMore = 3 //Дюрация больше этой цифры
@@ -79,31 +58,32 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                         <li>Поиск в Т0, Т+, Т+ (USD) - Основной режим - безадрес.</li>`
     var bonds = []
     var count
+    var errorCounter
     var log = `<li>Поиск начат ${new Date().toLocaleString("ru-RU")}.</li>`
     for (const t of [58, 193, 105, 77, 207, 167, 245]) { // https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/        
         const url = `https://iss.moex.com/iss/engines/stock/markets/bonds/boardgroups/${t}/securities.json?iss.dp=comma&iss.meta=off&iss.only=securities,marketdata&securities.columns=SECID,SECNAME,PREVLEGALCLOSEPRICE&marketdata.columns=SECID,YIELD,DURATION`
         console.log(`${getFunctionName()}. Ссылка поиска всех доступных облигаций группы: ${url}.`)
         log += `<li><b>Ссылка поиска всех доступных облигаций группы ${t}: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
-        try {
 
-            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
-            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
+        // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+        await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
 
-            const response = await fetch(url)
-            const json = await response.json()
-            // if (json.marketdata.data[0][1] == 0) {
-            //     console.log('%s. Нет данных c Московской биржи. Проверьте вручную по ссылке выше.', getFunctionName())
-            //     break
-            // }
-            let list = json.securities.data
-            count = list.length
-            console.log('%s. Всего в списке: %s бумаг.', getFunctionName(), count)
-            log += '<li>Всего в списке: ' + count + ' бумаг.</li>'
-            for (var i = 0; i <= count - 1; i++) {
+        const response = await fetch(url)
+        const json = await response.json()
+        // if (json.marketdata.data[0][1] == 0) {
+        //     console.log('%s. Нет данных c Московской биржи. Проверьте вручную по ссылке выше.', getFunctionName())
+        //     break
+        // }
+        let list = json.securities.data
+        count = list.length
+        console.log('%s. Всего в списке: %s бумаг.', getFunctionName(), count)
+        log += '<li>Всего в списке: ' + count + ' бумаг.</li>'
+        for (var i = 0; i <= count - 1; i++) {
 
-                // если из-за сетевой ошибки цикл прервался, тогда повтор
-                let success = false;
-                while (!success) {
+            // если из-за сетевой ошибки цикл прервался, тогда повтор
+            let retryCount = 0; // Счётчик попыток
+            while (retryCount < 5) { // Лимит перезапуска до 5 раз
+                try {
 
                     BondName = json.securities.data[i][1].replace(/\"/g, '').replace(/\'/g, '')
                     SECID = json.securities.data[i][0]
@@ -148,13 +128,15 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
                         }
                     }
 
-                    success = true; // Если действие прошло успешно, выход из цикла
+                    retryCount = 5; // Успешное завершение группы, прерываем повторение
+                } catch (e) {
+                    retryCount++;
+                    errorCounter++;
+                    console.log(`\n⚠️ Ошибка при обработке строки ${i + 1}: ${e}.\nПопытка ${retryCount} из 5. Ожидание 60 секунд.\n`);
+                    await new Promise(resolve => setTimeout(resolve, 60000)); // Ожидание перед повтором
                 }
-
             }
-        } catch (e) {
-            console.log(`Ошибка в ${getFunctionName()}: ${e}.`)
-            log += '<li>Ошибка в ' + getFunctionName() + '.</li>'
+
         }
     }
     if (bonds == 0) {
@@ -168,7 +150,8 @@ async function MOEXsearchBonds() { //поиск облигаций по пара
     });
     log += `<li>Поиск завершён ${new Date().toLocaleString("ru-RU")}.</li>`
 
-    console.log(`${getFunctionName()}. Выборка: ${JSON.stringify(bonds[0,1])}, ...`)
+    console.log(`${getFunctionName()}. Начало выборки: ${JSON.stringify(bonds[0,1])}, ...`)
+    console.log(`${getFunctionName()}. Количество ошибок в соединении с Московской биржей: ${errorCounter}, но все данные получены.`)
     await HTMLgenerate(bonds, conditions, log)
 }
 module.exports.MOEXsearchBonds = MOEXsearchBonds;
@@ -191,19 +174,12 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
     console.log('%s. Ссылка для поиска объёма сделок %s: %s', getFunctionName(), ID, url)
     log += `<li>Поиск оборота. Ссылка: <a target="_blank" rel="noopener noreferrer" href="${url}">${url}</a>.</b></li>`
     try {
+        // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+        await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
 
-        // если из-за сетевой ошибки цикл прервался, тогда повтор
-        let success = false;
-        while (!success) {
-            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
-            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
-
-            const response = await fetch(url)
-            const json = await response.json()
-            let list = json.history.data
-
-            success = true; // Если действие прошло успешно, выход из цикла
-        }
+        const response = await fetch(url)
+        const json = await response.json()
+        let list = json.history.data
 
         let count = list.length
         var volume_sum = 0
@@ -234,7 +210,7 @@ async function MOEXsearchVolume(ID, thresholdValue) { // Объем сделок
             log: log
         }
     } catch (e) {
-        console.log('Ошибка в %s', getFunctionName())
+        console.log(`⚠️ Ошибка c ${ID} в ${getFunctionName()}.`);
     }
 }
 module.exports.MOEXsearchVolume = MOEXsearchVolume;
@@ -242,24 +218,17 @@ module.exports.MOEXsearchVolume = MOEXsearchVolume;
 async function MOEXboardID(ID) { //узнаем boardid любой бумаги по тикеру
     const url = `https://iss.moex.com/iss/securities/${ID}.json?iss.meta=off&iss.only=boards&boards.columns=secid,boardid,is_primary`
     try {
+        // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+        await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
 
-        // если из-за сетевой ошибки цикл прервался, тогда повтор
-        let success = false;
-        while (!success) {
-            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
-            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
-
-            const response = await fetch(url)
-            const json = await response.json()
-
-            success = true; // Если действие прошло успешно, выход из цикла
-        }
+        const response = await fetch(url)
+        const json = await response.json()
 
         boardID = json.boards.data.find(e => e[2] === 1)[1]
         // console.log("%s. boardID для %s: %s", getFunctionName(), ID, boardID);
         return boardID
     } catch (e) {
-        console.log('Ошибка в %s', getFunctionName())
+        console.log(`⚠️ Ошибка c ${ID} в ${getFunctionName()}.`);
     }
 }
 module.exports.MOEXboardID = MOEXboardID;
@@ -275,18 +244,11 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
 
     console.log(`${getFunctionName()}. Ссылка для поиска месяцев выплат для ${ID}: ${url}.`)
     try {
+        // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+        await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
 
-        // если из-за сетевой ошибки цикл прервался, тогда повтор
-        let success = false;
-        while (!success) {
-            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
-            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
-
-            const response = await fetch(url)
-            const json = await response.json()
-
-            success = true; // Если действие прошло успешно, выход из цикла
-        }
+        const response = await fetch(url)
+        const json = await response.json()
 
         var couponDates = []
         var value_rubNull = 0
@@ -342,7 +304,7 @@ async function MOEXsearchMonthsOfPayments(ID) { //узнаём месяцы, к�
             log: log
         }
     } catch (e) {
-        console.log('Ошибка в %s', getFunctionName())
+        console.log(`⚠️ Ошибка c ${ID} в ${getFunctionName()}.`);
     }
 }
 module.exports.MOEXsearchMonthsOfPayments = MOEXsearchMonthsOfPayments;
@@ -352,17 +314,11 @@ async function MOEXsearchIsQualifiedInvestors(ID) { // Определяем эт
     console.log(`${getFunctionName()}. Ссылка для поиска общей информации по ${ID}: ${url}`)
     try {
 
-        // если из-за сетевой ошибки цикл прервался, тогда повтор
-        let success = false;
-        while (!success) {
-            // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
-            await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
+        // Ожидаем перед следующим запросом, чтобы соблюдать лимит в 50 запросов в минуту
+        await new Promise(resolve => setTimeout(resolve, 1200)); // Задержка 1200 мс между запросами
 
-            const response = await fetch(url)
-            const json = await response.json()
-
-            success = true; // Если действие прошло успешно, выход из цикла
-        }
+        const response = await fetch(url)
+        const json = await response.json()
 
         ISQUALIFIEDINVESTORS = json.description.data.find(e => e[0] === 'ISQUALIFIEDINVESTORS')[2]
         ISQUALIFIEDINVESTORS = parseInt(ISQUALIFIEDINVESTORS, 10)
@@ -376,7 +332,7 @@ async function MOEXsearchIsQualifiedInvestors(ID) { // Определяем эт
             return 'да'
         }
     } catch (e) {
-        console.log(`Ошибка в ${getFunctionName()}`)
+        console.log(`⚠️ Ошибка c ${ID} в ${getFunctionName()}.`);
     }
 }
 module.exports.MOEXsearchIsQualifiedInvestors = MOEXsearchIsQualifiedInvestors;
@@ -468,7 +424,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
         fs.writeFileSync(path.resolve(__dirname, `./searching_results/bond_search_${moment().format('YYYY-MM-DD')}.html`), hmtl)
         console.log(`\nЗаписано на диск с именем ${moment().format('YYYY-MM-DD')}.html`)
     } catch (e) {
-        console.log('Ошибка в %s', getFunctionName())
+        console.log(`⚠️ Ошибка в ${getFunctionName()}.`);
     }
 }
 module.exports.HTMLgenerate = HTMLgenerate;
@@ -503,8 +459,3 @@ function makeTableHTML(bonds) { //генерируем html таблицу из 
 function getFunctionName() { //автоматически получаем имя функции
     return (new Error()).stack.split('\n')[2].split(' ')[5];
 }
-
-// async function loadDelay() {
-//     const delay = (await import('delay')).default
-//     return delay
-// }
