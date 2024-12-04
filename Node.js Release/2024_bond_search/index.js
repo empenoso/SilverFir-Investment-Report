@@ -4,12 +4,12 @@
  * 
  * Модуль поиска облигаций по параметрам [2024_bond_search/index.js]
  * 
- * Описание: https://habr.com/ru/articles/835202/
+ * Описание: https://habr.com/ru/articles/863762/
  * 
  * @author Mikhail Shardin [Михаил Шардин] 
  * https://shardin.name/
  * 
- * Last updated: 26.11.2024
+ * Last updated: 04.12.2024
  * 
  */
 
@@ -408,7 +408,7 @@ async function HTMLgenerate(bonds, conditions, log) { //генерировани
             ${conditions}
         </ul>
         Составил <a href="https://github.com/empenoso" target="_blank"> Михаил Шардин</a>.<br>
-        <small>Подробнее про скрипт поиска ликвидных облигаций <a href="https://habr.com/ru/articles/835202/ " target="_blank">в статье на Хабре</a>.</small></p>
+        <small>Подробнее про скрипт поиска ликвидных облигаций <a href="https://habr.com/ru/articles/863762/ " target="_blank">в статье на Хабре</a>.</small></p>
         <details>
             <summary>Техническая информация</summary><small>
                 <ol>
