@@ -45,3 +45,9 @@
 :round_pushpin: Обзорная статья и предыстория создания первой редакции таблицы на [vc.ru](https://vc.ru/finance/92990-upravlencheskiy-uchet-lichnyh-aktivov) (ноябрь 2019 г).
 
 :round_pushpin: Первое публичное упоминание таблицы [ВКонтакте](https://vk.com/shardin_name?w=wall1763465_1791) (январь 2019 г).
+
+* * * * *
+
+### Альтернативная Python версия
+
+С 2025 года есть Python-версия в другом репозиторий. [Смотреть здесь](https://github.com/empenoso/moex-bond-search-and-analysis)
